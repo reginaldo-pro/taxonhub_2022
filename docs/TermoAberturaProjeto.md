@@ -14,11 +14,10 @@ O projeto será considerado um sucesso se atender aos seguintes objetivos:
 # Fases e principais entregas
 
 Haverá três entregas (*releases*) que deverão passar pelos critérios de aceitação:
-- 06/04/2021
-- 04/05/2021
-- 24/05/2021
+- XXX
+- XXX
 
-O projeto será encerrado no dia 25/05/2021.
+O projeto será encerrado no dia XXX.
 
 # Produtos esperados
 
