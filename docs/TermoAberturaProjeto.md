@@ -14,27 +14,14 @@ O projeto será considerado um sucesso se atender aos seguintes objetivos:
 # Fases e principais entregas
 
 Haverá três entregas (*releases*) que deverão passar pelos critérios de aceitação:
-- 06/04/2021
-- 04/05/2021
-- 24/05/2021
+- XXX
+- XXX
 
-O projeto será encerrado no dia 25/05/2021.
+O projeto será encerrado no dia XXX.
 
 # Produtos esperados
 
 De maneira geral, espera-se entregar:
 - Um módulo para coleta e tratamento de dados taxonomicos
 - Um módulo para coleta e tratamento de dados de inventários
-
-# Premissas
-
-A principal premissa do projeto é que as partes interessadas tenham disponibilidade para trabalhar conjuntamente aos desenvolvedores no levantamento dos requisitos e na aceitação dos produtos produzidos. 
-
-
-# Dados das partes interessadas no projeto
-
-- Dayani (dayanibailly@gmail.com): professora da UEM, especialista em estudos de conservação de espécies e biodiversidade (peixes);
-- Valéria  (vfbsilva19@gmail.com): professora da UFMS, especialista em estudos de conservação de espécies e biodiversidade (plantas e peixes);
-- Karina (karina.fidanza@gmail.com): professora da UEM, taxonomista estrita e especialista em estudos de conservação de espécies (plantas, especialmente macrófitas);
-- Tania (taniacrivelari@hotmail.com ): doutoranda da UEM, estuda macrófitas.
 
