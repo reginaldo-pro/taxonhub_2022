@@ -6,6 +6,7 @@
   "author": "matheusht <matheustheodoro3112@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "csv-parse": "^5.0.4",
     "express": "^4.17.3",
     "multer": "^1.4.4",
     "selenium-webdriver": "^4.1.1",
