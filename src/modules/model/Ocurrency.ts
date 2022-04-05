@@ -6,7 +6,7 @@ class Ocurrency {
 
     id?: string;
     name: string;
-    description: string;
+    //adicionar restante
 
     constructor() {
         if(!this.id){
