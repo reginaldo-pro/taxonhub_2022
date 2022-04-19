@@ -1,18 +1,17 @@
-import {v4 as uuidv4} from "uuid";
-
+import { v4 as uuidv4 } from 'uuid';
 
 class Taxonomy {
-    //model
+    // model
 
     id?: string;
     name: string;
-    //adicionar restante
+    // adicionar restante
 
     constructor() {
-        if(!this.id){
+        if (!this.id) {
             this.id = uuidv4();
         }
     }
 }
 
-export { Taxonomy }
+export { Taxonomy };

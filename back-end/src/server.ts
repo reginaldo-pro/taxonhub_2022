@@ -1,14 +1,11 @@
-import express from 'express'
-import { router } from "./routes";
+import express from 'express';
+
+import { router } from './routes';
 
 const app = express();
 app.use(express.json());
-app.use(router)
+app.use(router);
 
+app.get('/', (_, res) => res.send('Hello mundo'));
 
-
-app.get("/", (req,res) => {
-    res.send("Hello mundo")
-})
-
-app.listen("3333")
+app.listen('3333');

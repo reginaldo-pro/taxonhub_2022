@@ -1,10 +1,11 @@
-import { Router } from "express";
-import { taxonomyRoutes } from "./taxonomy.routes";
-import { ocurrencyRoutes } from "./ocurrency.routes";
+import { Router } from 'express';
+
+import { ocurrencyRoutes } from './ocurrency.routes';
+import { taxonomyRoutes } from './taxonomy.routes';
 
 const router = Router();
 
-router.use("/taxonomy",taxonomyRoutes)
-router.use("/ocurrency",ocurrencyRoutes)
+router.use('/taxonomy', taxonomyRoutes);
+router.use('/ocurrency', ocurrencyRoutes);
 
-export { router }
+export { router };
