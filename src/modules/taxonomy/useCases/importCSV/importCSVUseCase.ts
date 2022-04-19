@@ -10,17 +10,19 @@ interface IImportCSV {
 class ImportCSVUseCase {
     constructor(private taxonomiesRepository: ITaxonomyRepository){}
 
-    loadCSV(file: Express.Multer.File): Promise<IImportCSV[]> {
+
+    async execute(file: Express.Multer.File): Promise<IImportCSV[]> {
         return new Promise((resolve, reject) => {
             const stream = fs.createReadStream(file.path);
+            
             const taxonomies: IImportCSV[] = []
             const parseFile = parse()
     
             stream.pipe(parseFile);
             parseFile.on('data', async (line) => {
-                const [name /**, etc, etc */] = line;
+                const [name] = line;
                 taxonomies.push({
-                    name
+                    name,
                 })
             })
             .on('end', () => {
@@ -31,10 +33,6 @@ class ImportCSVUseCase {
                 reject(err);
             })
         })
-    }
-
-    async execute(file: Express.Multer.File): Promise<void> {
-            //fazer busca
     
     }
 
