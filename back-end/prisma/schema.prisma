@@ -1,0 +1,20 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model taxonomy {
+  id                       Int    @id @default(autoincrement())
+  searched_name            String
+  returned_name            String
+  accepted_name_or_synonym String
+  synonym_name             String
+  respective_family        String
+}
