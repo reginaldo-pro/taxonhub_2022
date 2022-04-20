@@ -1,4 +1,3 @@
-import fs from 'fs';
 import puppeteer from 'puppeteer';
 
 class GetVersionUseCase {
