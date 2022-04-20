@@ -9,7 +9,7 @@ class SaveCSVtoDBUseCase {
     constructor(private prismaClient: PrismaClient) {}
 
     execute() {
-        fs.createReadStream('classification.txt')
+        fs.createReadStream('./classification.txt')
             .pipe(
                 csvParser({
                     separator: '\t',
