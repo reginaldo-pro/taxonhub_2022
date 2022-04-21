@@ -1,12 +1,16 @@
 import puppeteer from 'puppeteer';
 
+import { WfoRepository } from '../../repositories/implementations/WfoRepository';
+
 class GetVersionUseCase {
+    constructor(private wfoRepository: WfoRepository) {}
+
     async getVersionFromWebsite() {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
 
         await page.goto('http://www.worldfloraonline.org/downloadData', {
-            timeout: 0,
+            timeout: 60000,
         });
 
         const data = await page.$$eval('table thead tr td', (tds) =>
@@ -21,11 +25,6 @@ class GetVersionUseCase {
         return version;
     }
 
-    getSavedVersion() {
-        // change
-        return 'v.2021.01';
-    }
-
     compareVersion(scrappedVersion: string, savedVersion: string) {
         return scrappedVersion === savedVersion;
     }
@@ -35,12 +34,12 @@ class GetVersionUseCase {
     }
 
     async execute() {
-        const scrappedVersion = await this.getVersionFromWebsite();
-        const savedVersion = this.getSavedVersion();
-        const isUpdated = this.compareVersion(scrappedVersion, savedVersion);
+        const versionFromWebsite = await this.getVersionFromWebsite();
+        const savedVersion = await this.wfoRepository.getSavedVersion();
+        const isUpdated = this.compareVersion(versionFromWebsite, savedVersion);
 
         const response = {
-            scrappedVersion,
+            versionFromWebsite,
             savedVersion,
             isUpdated,
         };
