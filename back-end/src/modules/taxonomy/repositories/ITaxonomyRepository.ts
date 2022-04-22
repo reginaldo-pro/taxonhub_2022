@@ -1,11 +1,9 @@
-import { Taxonomy } from "../../model/Taxonomy";
-
-
+import { Taxonomy } from '../../model/Taxonomy';
 
 interface ITaxonomyRepository {
-    findByName(name: string): Taxonomy[] ;
+    findByName(name: string): Taxonomy[];
     list(): Taxonomy[];
-    //incluir metodos (filtro e etc)
+    // incluir metodos (filtro e etc)
 }
 
 export { ITaxonomyRepository };

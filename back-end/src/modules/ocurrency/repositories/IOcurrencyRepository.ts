@@ -1,12 +1,9 @@
-import { Ocurrency } from "../../model/Ocurrency";
-
-
-
+import { Ocurrency } from '../../model/Ocurrency';
 
 interface IOcurrencyRepository {
-    findByName(name: string): Ocurrency[] ;
+    findByName(name: string): Ocurrency[];
     list(): Ocurrency[];
-    //incluir metodos (filtro e etc)
+    // incluir metodos (filtro e etc)
 }
 
 export { IOcurrencyRepository };

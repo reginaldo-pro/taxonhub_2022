@@ -1,20 +1,16 @@
-import { Request, Response } from "express";
-import { ImportCSVUseCase } from "./importCSVUseCase";
+import { Request, Response } from 'express';
+
+import { ImportCSVUseCase } from './importCSVUseCase';
 
 class ImportCSVController {
-
-    constructor(private importCategoryUseCase: ImportCSVUseCase) { }
+    constructor(private importCategoryUseCase: ImportCSVUseCase) {}
     handle(request: Request, response: Response): Response {
         const { file } = request;
 
+        this.importCategoryUseCase.execute(file); // faz a busca
 
-        this.importCategoryUseCase.execute(file); //faz a busca
-
-        
-        return response.send() 
+        return response.send();
     }
-
 }
 
-
-export { ImportCSVController }
+export { ImportCSVController };
