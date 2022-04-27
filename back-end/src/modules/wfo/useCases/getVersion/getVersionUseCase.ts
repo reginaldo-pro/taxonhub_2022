@@ -1,11 +1,12 @@
 import puppeteer from 'puppeteer';
 
 import { WfoRepository } from '../../repositories/implementations/WfoRepository';
+import { IVersionData } from './types';
 
 class GetVersionUseCase {
     constructor(private wfoRepository: WfoRepository) {}
 
-    async getVersionFromWebsite() {
+    async getVersionFromWebsite(): Promise<string> {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
 
@@ -25,16 +26,16 @@ class GetVersionUseCase {
         return version;
     }
 
-    compareVersion(scrappedVersion: string, savedVersion: string) {
+    compareVersion(scrappedVersion: string, savedVersion: string): boolean {
         return scrappedVersion === savedVersion;
     }
 
-    async execute() {
+    async execute(): Promise<IVersionData> {
         const versionFromWebsite = await this.getVersionFromWebsite();
         const savedVersion = await this.wfoRepository.getSavedVersion();
         const isUpdated = this.compareVersion(versionFromWebsite, savedVersion);
 
-        const response = {
+        const response: IVersionData = {
             versionFromWebsite,
             savedVersion,
             isUpdated,
