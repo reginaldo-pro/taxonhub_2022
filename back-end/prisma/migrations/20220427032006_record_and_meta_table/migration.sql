@@ -33,3 +33,14 @@ CREATE TABLE "record" (
 
     CONSTRAINT "record_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateTable
+CREATE TABLE "meta" (
+    "key" TEXT NOT NULL,
+    "value" TEXT NOT NULL,
+
+    CONSTRAINT "meta_pkey" PRIMARY KEY ("key")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "record_taxonID_key" ON "record"("taxonID");
