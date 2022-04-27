@@ -23,7 +23,7 @@ class OcurrencyRepository implements IOcurrencyRepository {
 
     findByName(name: string): Ocurrency[] {
         const ocurrencies = this.ocurrencies.filter(
-            (ocurrency) => ocurrency.name === name
+            (ocurrency) => ocurrency.name === name,
         );
 
         return ocurrencies;

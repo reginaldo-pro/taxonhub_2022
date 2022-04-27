@@ -1,35 +1,58 @@
-import { PrismaClient } from '@prisma/client';
-import csvParser from 'csv-parser';
-import fs from 'fs';
+import { meta, PrismaClient } from '@prisma/client';
 import { IRecord } from 'src/modules/model/WFORecord';
 
 import { IWfoRepository } from '../IWfoRepository';
-import { headers } from './constants';
 
 class WfoRepository implements IWfoRepository {
     constructor(private prismaClient: PrismaClient) {}
 
-    async saveTxtToDB(): Promise<void> {
-        fs.createReadStream('./classification.txt')
-            .pipe(
-                csvParser({
-                    separator: '\t',
-                    skipLines: 1,
-                    escape: '',
-                    quote: '',
-                    headers,
-                })
-            )
-            .on('data', async (row) => {
-                const data: IRecord = { ...row };
+    async getRecord(taxonID: string): Promise<IRecord> {
+        const record = await this.prismaClient.record.findUnique({
+            where: {
+                taxonID,
+            },
+        });
 
-                await this.prismaClient.record.create({
-                    data: { ...data },
-                });
-            })
-            .on('end', () => {
-                console.log('finished.');
-            });
+        return record as IRecord;
+    }
+
+    async saveRecord(data: IRecord): Promise<void> {
+        await this.prismaClient.record.create({
+            data: { ...data },
+        });
+    }
+
+    async updateRecord(data: IRecord): Promise<void> {
+        await this.prismaClient.record.update({
+            where: {
+                taxonID: data.taxonID,
+            },
+            data: {
+                ...data,
+            },
+        });
+    }
+
+    async updateVersion(version: string): Promise<void> {
+        await this.prismaClient.meta.update({
+            where: {
+                key: 'wfoVersion',
+            },
+            data: {
+                value: version,
+            },
+        });
+    }
+
+    private async saveVersion(version: string): Promise<meta> {
+        const data = await this.prismaClient.meta.create({
+            data: {
+                key: 'wfoVersion',
+                value: version,
+            },
+        });
+
+        return data;
     }
 
     async getSavedVersion(): Promise<string> {
@@ -40,12 +63,8 @@ class WfoRepository implements IWfoRepository {
         });
 
         if (!data) {
-            data = await this.prismaClient.meta.create({
-                data: {
-                    key: 'wfoVersion',
-                    value: 'v.2021.01',
-                },
-            });
+            // this will force the system to download the data and save everything to the database on the first run
+            data = await this.saveVersion('please update!');
         }
 
         return data.value;

@@ -103,5 +103,4 @@ dist
 # TernJS port file
 .tern-port
 
-# wfo classification file
-classification.txt
+tmp

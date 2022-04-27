@@ -12,7 +12,7 @@ datasource db {
 
 model record {
   id                       Int    @id @default(autoincrement())
-  taxonID                  String
+  taxonID                  String @unique
   scientificNameID         String
   localID                  String
   scientificName           String
