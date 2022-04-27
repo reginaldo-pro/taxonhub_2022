@@ -93,10 +93,10 @@ class UpdateDatabaseUseCase {
 
     async execute() {
         const link = await this.getDownloadLink();
-        this.setDownloadPath('./tmp');
+        this.setDownloadPath('./tmpData');
 
-        await this.downloadFile(link, './tmp/', 'data.zip');
-        await this.updateDatabase('./tmp/classification.txt');
+        await this.downloadFile(link, './tmpData/', 'data.zip');
+        await this.updateDatabase('./tmpData/classification.txt');
     }
 }
 
