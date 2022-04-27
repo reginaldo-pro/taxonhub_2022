@@ -1,34 +1,10 @@
 import { meta, PrismaClient } from '@prisma/client';
-import csvParser from 'csv-parser';
-import fs from 'fs';
 import { IRecord } from 'src/modules/model/WFORecord';
 
 import { IWfoRepository } from '../IWfoRepository';
-import { headers } from './constants';
 
 class WfoRepository implements IWfoRepository {
     constructor(private prismaClient: PrismaClient) {}
-
-    async saveTxtToDB(pathToFile: string): Promise<void> {
-        fs.createReadStream(pathToFile)
-            .pipe(
-                csvParser({
-                    separator: '\t',
-                    skipLines: 1,
-                    escape: '',
-                    quote: '',
-                    headers,
-                }),
-            )
-            .on('data', async (row) => {
-                const data: IRecord = { ...row };
-
-                await this.saveRecord(data);
-            })
-            .on('end', () => {
-                console.log('finished.');
-            });
-    }
 
     async getRecord(taxonID: string): Promise<IRecord> {
         const record = await this.prismaClient.record.findUnique({
@@ -87,7 +63,8 @@ class WfoRepository implements IWfoRepository {
         });
 
         if (!data) {
-            data = await this.saveVersion('v.2021.01');
+            // this will force the system to download the data and save everything to the database on the first run
+            data = await this.saveVersion('please update!');
         }
 
         return data.value;

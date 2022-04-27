@@ -75,14 +75,14 @@ class UpdateDatabaseUseCase {
                 const record = await this.wfoRepository.getRecord(data.taxonID);
 
                 if (!record) {
-                    console.log(
-                        `Inexistent record. Saving with ID: ${data.taxonID}`,
-                    );
+                    // console.log(
+                    //     `Inexistent record. Saving with ID: ${data.taxonID}`,
+                    // );
                     await this.wfoRepository.saveRecord(data);
                 } else {
-                    console.log(
-                        `Existing record. Updating with ID: ${data.taxonID}`,
-                    );
+                    // console.log(
+                    //     `Existing record. Updating with ID: ${data.taxonID}`,
+                    // );
                     await this.wfoRepository.updateRecord(data);
                 }
             })
