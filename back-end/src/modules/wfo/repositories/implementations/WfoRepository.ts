@@ -23,13 +23,38 @@ class WfoRepository implements IWfoRepository {
             .on('data', async (row) => {
                 const data: IRecord = { ...row };
 
-                await this.prismaClient.record.create({
-                    data: { ...data },
-                });
+                await this.saveRecord(data);
             })
             .on('end', () => {
                 console.log('finished.');
             });
+    }
+
+    async getRecord(taxonID: string): Promise<IRecord> {
+        const record = await this.prismaClient.record.findUnique({
+            where: {
+                taxonID,
+            },
+        });
+
+        return record as IRecord;
+    }
+
+    async saveRecord(data: IRecord): Promise<void> {
+        await this.prismaClient.record.create({
+            data: { ...data },
+        });
+    }
+
+    async updateRecord(data: IRecord): Promise<void> {
+        await this.prismaClient.record.update({
+            where: {
+                taxonID: data.taxonID,
+            },
+            data: {
+                ...data,
+            },
+        });
     }
 
     async updateVersion(version: string): Promise<void> {
@@ -39,17 +64,6 @@ class WfoRepository implements IWfoRepository {
             },
             data: {
                 value: version,
-            },
-        });
-    }
-
-    async updateRecord(newRecord: IRecord): Promise<void> {
-        await this.prismaClient.record.update({
-            where: {
-                taxonID: newRecord.taxonID,
-            },
-            data: {
-                ...newRecord,
             },
         });
     }
