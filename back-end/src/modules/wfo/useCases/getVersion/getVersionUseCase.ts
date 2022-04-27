@@ -16,7 +16,7 @@ class GetVersionUseCase {
         const data = await page.$$eval('table thead tr td', (tds) =>
             tds.map((td) => {
                 return td.textContent;
-            })
+            }),
         );
         await browser.close();
 
@@ -29,10 +29,6 @@ class GetVersionUseCase {
         return scrappedVersion === savedVersion;
     }
 
-    updateVersion() {
-        throw new Error('Not implemented');
-    }
-
     async execute() {
         const versionFromWebsite = await this.getVersionFromWebsite();
         const savedVersion = await this.wfoRepository.getSavedVersion();
@@ -43,6 +39,7 @@ class GetVersionUseCase {
             savedVersion,
             isUpdated,
         };
+
         return response;
     }
 }
