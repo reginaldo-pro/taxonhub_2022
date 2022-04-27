@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { meta, PrismaClient } from '@prisma/client';
 import csvParser from 'csv-parser';
 import fs from 'fs';
 import { IRecord } from 'src/modules/model/WFORecord';
@@ -9,8 +9,8 @@ import { headers } from './constants';
 class WfoRepository implements IWfoRepository {
     constructor(private prismaClient: PrismaClient) {}
 
-    async saveTxtToDB(): Promise<void> {
-        fs.createReadStream('./classification.txt')
+    async saveTxtToDB(pathToFile: string): Promise<void> {
+        fs.createReadStream(pathToFile)
             .pipe(
                 csvParser({
                     separator: '\t',
@@ -18,7 +18,7 @@ class WfoRepository implements IWfoRepository {
                     escape: '',
                     quote: '',
                     headers,
-                })
+                }),
             )
             .on('data', async (row) => {
                 const data: IRecord = { ...row };
@@ -32,6 +32,39 @@ class WfoRepository implements IWfoRepository {
             });
     }
 
+    async updateVersion(version: string): Promise<void> {
+        await this.prismaClient.meta.update({
+            where: {
+                key: 'wfoVersion',
+            },
+            data: {
+                value: version,
+            },
+        });
+    }
+
+    async updateRecord(newRecord: IRecord): Promise<void> {
+        await this.prismaClient.record.update({
+            where: {
+                taxonID: newRecord.taxonID,
+            },
+            data: {
+                ...newRecord,
+            },
+        });
+    }
+
+    private async saveVersion(version: string): Promise<meta> {
+        const data = await this.prismaClient.meta.create({
+            data: {
+                key: 'wfoVersion',
+                value: version,
+            },
+        });
+
+        return data;
+    }
+
     async getSavedVersion(): Promise<string> {
         let data = await this.prismaClient.meta.findUnique({
             where: {
@@ -40,12 +73,7 @@ class WfoRepository implements IWfoRepository {
         });
 
         if (!data) {
-            data = await this.prismaClient.meta.create({
-                data: {
-                    key: 'wfoVersion',
-                    value: 'v.2021.01',
-                },
-            });
+            data = await this.saveVersion('v.2021.01');
         }
 
         return data.value;
