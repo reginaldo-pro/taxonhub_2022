@@ -6,6 +6,7 @@ interface IWfoRepository {
     getRecord(taxonID: string): Promise<IRecord>;
     saveRecord(data: IRecord): Promise<void>;
     updateRecord(data: IRecord): Promise<void>;
+    dropRecordTable(): Promise<void>;
 }
 
 export { IWfoRepository };

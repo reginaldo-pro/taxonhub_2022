@@ -6,7 +6,7 @@ import { IVersionData } from './types';
 class GetVersionUseCase {
     constructor(private wfoRepository: WfoRepository) {}
 
-    async getVersionFromWebsite(): Promise<string> {
+    private async getVersionFromWebsite(): Promise<string> {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
 
@@ -26,7 +26,10 @@ class GetVersionUseCase {
         return version;
     }
 
-    compareVersion(scrappedVersion: string, savedVersion: string): boolean {
+    private compareVersion(
+        scrappedVersion: string,
+        savedVersion: string,
+    ): boolean {
         return scrappedVersion === savedVersion;
     }
 
