@@ -16,6 +16,10 @@ class WfoRepository implements IWfoRepository {
         return record as IRecord;
     }
 
+    async dropRecordTable(): Promise<void> {
+        await this.prismaClient.record.deleteMany({});
+    }
+
     async saveRecord(data: IRecord): Promise<void> {
         await this.prismaClient.record.create({
             data: { ...data },
@@ -63,7 +67,6 @@ class WfoRepository implements IWfoRepository {
         });
 
         if (!data) {
-            // this will force the system to download the data and save everything to the database on the first run
             data = await this.saveVersion('please update!');
         }
 
