@@ -5,10 +5,14 @@ import puppeteer from 'puppeteer';
 import { IRecord } from 'src/modules/model/WFORecord';
 import request from 'superagent';
 
-import { headers } from '../../repositories/implementations/constants';
 import { WfoRepository } from '../../repositories/implementations/WfoRepository';
+import { headers } from '../../types';
 
 class UpdateDatabaseUseCase {
+    private pathToFolder = './newData';
+    private zipFile = 'data.zip';
+    private pathToDataFile = this.pathToFolder.concat('/classification.txt');
+
     constructor(private wfoRepository: WfoRepository) {}
 
     private async getDownloadLink(): Promise<string> {
@@ -30,7 +34,7 @@ class UpdateDatabaseUseCase {
         return pageUrls[0];
     }
 
-    private setDownloadPath(path: string) {
+    private setPath(path: string) {
         fs.rmSync(path, { recursive: true, force: true });
         if (!fs.existsSync(path)) fs.mkdirSync(path);
     }
@@ -38,16 +42,14 @@ class UpdateDatabaseUseCase {
     private async downloadFile(
         link: string,
         pathToFolder: string,
-        fileName: string,
+        fullPath: string,
     ) {
-        const path = pathToFolder.concat(fileName);
-
         await new Promise((resolve, reject) => {
             request
                 .get(link)
-                .pipe(fs.createWriteStream(path))
+                .pipe(fs.createWriteStream(fullPath))
                 .on('finish', () => {
-                    const zip = new AdmZip(path);
+                    const zip = new AdmZip(fullPath);
                     zip.extractAllTo(pathToFolder);
 
                     resolve('Done');
@@ -59,44 +61,53 @@ class UpdateDatabaseUseCase {
     }
 
     private async updateDatabase(path: string): Promise<void> {
-        fs.createReadStream(path)
-            .pipe(
-                csvParser({
-                    separator: '\t',
-                    skipLines: 1,
-                    escape: '',
-                    quote: '',
-                    headers,
-                }),
-            )
-            .on('data', async (row) => {
-                const data: IRecord = { ...row };
+        await new Promise((resolve, reject) => {
+            fs.createReadStream(path)
+                .pipe(
+                    csvParser({
+                        separator: '\t',
+                        skipLines: 1,
+                        escape: '',
+                        quote: '',
+                        headers,
+                    }),
+                )
+                .on('data', async (row) => {
+                    const data: IRecord = { ...row };
 
-                const record = await this.wfoRepository.getRecord(data.taxonID);
+                    const record = await this.wfoRepository.getRecord(
+                        data.taxonID,
+                    );
 
-                if (!record) {
-                    // console.log(
-                    //     `Inexistent record. Saving with ID: ${data.taxonID}`,
-                    // );
-                    await this.wfoRepository.saveRecord(data);
-                } else {
-                    // console.log(
-                    //     `Existing record. Updating with ID: ${data.taxonID}`,
-                    // );
-                    await this.wfoRepository.updateRecord(data);
-                }
-            })
-            .on('end', () => {
-                console.log('finished.');
-            });
+                    if (!record) {
+                        await this.wfoRepository.saveRecord(data);
+                    } else {
+                        await this.wfoRepository.updateRecord(data);
+                    }
+                })
+                .on('end', () => {
+                    resolve('ok');
+                })
+                .on('error', () => reject(new Error()));
+        });
     }
 
-    async execute() {
+    async execute(newVersion: string) {
         const link = await this.getDownloadLink();
-        this.setDownloadPath('./tmpData');
 
-        await this.downloadFile(link, './tmpData/', 'data.zip');
-        await this.updateDatabase('./tmpData/classification.txt');
+        this.setPath(this.pathToFolder);
+
+        await this.downloadFile(
+            link,
+            this.pathToFolder,
+            this.pathToFolder.concat('/', this.zipFile),
+        );
+
+        // await this.wfoRepository.dropRecordTable();
+
+        await this.updateDatabase(this.pathToDataFile);
+
+        await this.wfoRepository.updateVersion(newVersion);
     }
 }
 
