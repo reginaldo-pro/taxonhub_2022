@@ -8,4 +8,5 @@ const wfoRepository = new WfoRepository(dbClient);
 const getVersionUseCase = new GetVersionUseCase(wfoRepository);
 const getVersionController = new GetVersionController(getVersionUseCase);
 
+export { getVersionUseCase };
 export { getVersionController };
