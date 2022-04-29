@@ -14,7 +14,7 @@ const checkVersionAndUpdate = async () => {
 };
 
 export default cron.schedule(
-    '0 0 * * 0',
+    '0 1 * * *',
     async () => {
         checkVersionAndUpdate();
     },
