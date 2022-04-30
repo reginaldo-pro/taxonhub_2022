@@ -4,9 +4,12 @@ class GetDatabaseStatusUseCase {
     constructor(private wfoRepository: WfoRepository) {}
 
     async execute() {
-        const status = await this.wfoRepository.getDatabaseStatus();
+        const consistencyStatus =
+            await this.wfoRepository.getDatabaseConsistencyStatus();
 
-        return status;
+        const updateStatus = await this.wfoRepository.getDatabaseUpdateStatus();
+
+        return { consistencyStatus, updateStatus };
     }
 }
 

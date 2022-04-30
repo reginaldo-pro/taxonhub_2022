@@ -2,9 +2,20 @@ import { meta, PrismaClient } from '@prisma/client';
 import { IRecord } from 'src/modules/model/WFORecord';
 
 import { IWfoRepository } from '../IWfoRepository';
+import { EMetaTableKeys, EMetaTableValues } from '../types';
 
 class WfoRepository implements IWfoRepository {
     constructor(private prismaClient: PrismaClient) {}
+
+    async getRecordByName(scientificName: string): Promise<IRecord> {
+        const record = await this.prismaClient.record.findFirst({
+            where: {
+                scientificName,
+            },
+        });
+
+        return record as IRecord;
+    }
 
     async getRecord(taxonID: string): Promise<IRecord> {
         const record = await this.prismaClient.record.findUnique({
@@ -40,7 +51,7 @@ class WfoRepository implements IWfoRepository {
     async updateVersion(version: string): Promise<void> {
         await this.prismaClient.meta.update({
             where: {
-                key: 'wfoVersion',
+                key: EMetaTableKeys.currentDatabaseVersion,
             },
             data: {
                 value: version,
@@ -51,7 +62,7 @@ class WfoRepository implements IWfoRepository {
     private async saveVersion(version: string): Promise<meta> {
         const data = await this.prismaClient.meta.create({
             data: {
-                key: 'wfoVersion',
+                key: EMetaTableKeys.currentDatabaseVersion,
                 value: version,
             },
         });
@@ -62,7 +73,7 @@ class WfoRepository implements IWfoRepository {
     async getSavedVersion(): Promise<string> {
         let data = await this.prismaClient.meta.findUnique({
             where: {
-                key: 'wfoVersion',
+                key: EMetaTableKeys.currentDatabaseVersion,
             },
         });
 
@@ -73,10 +84,34 @@ class WfoRepository implements IWfoRepository {
         return data.value;
     }
 
-    async updateDatabaseStatus(status: string): Promise<void> {
+    private async updateMeta(key: string, value: string): Promise<void> {
         await this.prismaClient.meta.update({
             where: {
-                key: 'dbStatus',
+                key,
+            },
+            data: {
+                value,
+            },
+        });
+    }
+
+    private async saveMeta(key: string, value: string): Promise<meta> {
+        const data = await this.prismaClient.meta.create({
+            data: {
+                key,
+                value,
+            },
+        });
+
+        return data;
+    }
+
+    async updateDatabasePhaseStatus(status: string): Promise<void> {
+        const data = await this.getDatabaseUpdateStatus();
+
+        await this.prismaClient.meta.update({
+            where: {
+                key: data.key,
             },
             data: {
                 value: status,
@@ -84,29 +119,53 @@ class WfoRepository implements IWfoRepository {
         });
     }
 
-    private async saveDatabaseStatus(version: string): Promise<meta> {
-        const data = await this.prismaClient.meta.create({
+    async updateDatabaseConsistencyStatus(status: string): Promise<void> {
+        const data = await this.getDatabaseConsistencyStatus();
+
+        await this.prismaClient.meta.update({
+            where: {
+                key: data.key,
+            },
             data: {
-                key: 'dbStatus',
-                value: version,
+                value: status,
             },
         });
-
-        return data;
     }
 
-    async getDatabaseStatus(): Promise<string> {
-        let data = await this.prismaClient.meta.findUnique({
+    // dbConsistencyStatus is if the database is good for read or not (for the final user)
+    // dbUpdateStatus is if the database has been updated (for the system)
+    async getDatabaseConsistencyStatus(): Promise<meta> {
+        let dbConsistencyStatus = await this.prismaClient.meta.findUnique({
             where: {
-                key: 'dbStatus',
+                key: EMetaTableKeys.databaseConsistencyStatus,
             },
         });
 
-        if (!data) {
-            data = await this.saveDatabaseStatus('stable');
+        if (!dbConsistencyStatus) {
+            dbConsistencyStatus = await this.saveMeta(
+                EMetaTableKeys.databaseConsistencyStatus,
+                EMetaTableValues.consistent,
+            );
         }
 
-        return data.value;
+        return dbConsistencyStatus;
+    }
+
+    async getDatabaseUpdateStatus(): Promise<meta> {
+        let dbUpdateStatus = await this.prismaClient.meta.findUnique({
+            where: {
+                key: EMetaTableKeys.databasePhaseStatus,
+            },
+        });
+
+        if (!dbUpdateStatus) {
+            dbUpdateStatus = await this.saveMeta(
+                EMetaTableKeys.databasePhaseStatus,
+                EMetaTableValues.stable,
+            );
+        }
+
+        return dbUpdateStatus;
     }
 }
 
