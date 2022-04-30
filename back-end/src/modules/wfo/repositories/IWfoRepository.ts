@@ -1,3 +1,4 @@
+import { meta } from '@prisma/client';
 import { IRecord } from 'src/modules/model/WFORecord';
 
 interface IWfoRepository {
@@ -5,12 +6,16 @@ interface IWfoRepository {
     updateVersion(version: string): Promise<void>;
 
     getRecord(taxonID: string): Promise<IRecord>;
+    getRecordByName(scientificName: string): Promise<IRecord>;
     saveRecord(data: IRecord): Promise<void>;
     updateRecord(data: IRecord): Promise<void>;
+
     dropRecordTable(): Promise<void>;
 
-    getDatabaseStatus(): Promise<string>;
-    updateDatabaseStatus(status: string): Promise<void>;
+    updateDatabasePhaseStatus(status: string): Promise<void>;
+    updateDatabaseConsistencyStatus(status: string): Promise<void>;
+    getDatabaseConsistencyStatus(): Promise<meta>;
+    getDatabaseUpdateStatus(): Promise<meta>;
 }
 
 export { IWfoRepository };
