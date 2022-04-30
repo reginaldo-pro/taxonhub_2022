@@ -1,6 +1,7 @@
 import cron from 'node-cron';
 
 import { EMetaTableValues } from '../wfo/repositories/types';
+import { downloadNewDataUseCase } from '../wfo/useCases/downloadNewData';
 import { getDatabaseStatusUseCase } from '../wfo/useCases/getDatabaseStatus';
 import { getVersionUseCase } from '../wfo/useCases/getVersion';
 import { IVersionData } from '../wfo/useCases/getVersion/types';
@@ -12,7 +13,7 @@ const checkVersionAndUpdate = async () => {
     console.log(data);
 
     if (!data.isUpdated) {
-        // await downloadNewDataUseCase.execute();
+        await downloadNewDataUseCase.execute();
         await updateDatabaseUseCase.execute(data.versionFromWebsite);
     }
 };
@@ -32,7 +33,7 @@ export const execute = async () => {
 };
 
 export default cron.schedule(
-    '*/1 * * * *',
+    '*/30 * * * *',
     async () => {
         await execute();
     },
