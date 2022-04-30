@@ -1,5 +1,6 @@
 import cron from 'node-cron';
 
+import { getDatabaseStatusUseCase } from '../wfo/useCases/getDatabaseStatus';
 import { getVersionUseCase } from '../wfo/useCases/getVersion';
 import { IVersionData } from '../wfo/useCases/getVersion/types';
 import { updateDatabaseUseCase } from '../wfo/useCases/updateDatabase';
@@ -13,10 +14,20 @@ const checkVersionAndUpdate = async () => {
     }
 };
 
+export const execute = async () => {
+    const status = await getDatabaseStatusUseCase.execute();
+
+    console.log(status);
+
+    if (status === 'stable') {
+        await checkVersionAndUpdate();
+    }
+};
+
 export default cron.schedule(
-    '0 1 * * *',
+    '*/2 * * * *',
     async () => {
-        checkVersionAndUpdate();
+        await execute();
     },
     {
         scheduled: false,

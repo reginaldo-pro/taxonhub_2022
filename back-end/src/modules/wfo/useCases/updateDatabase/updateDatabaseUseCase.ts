@@ -80,8 +80,15 @@ class UpdateDatabaseUseCase {
                     );
 
                     if (!record) {
+                        // console.log(
+                        //     `Record with taxonID: ${data.taxonID} not found. Saving..`,
+                        // );
+
                         await this.wfoRepository.saveRecord(data);
                     } else {
+                        // console.log(
+                        //     `Record with taxonID: ${data.taxonID} found. Updating..`,
+                        // );
                         await this.wfoRepository.updateRecord(data);
                     }
                 })
@@ -103,11 +110,11 @@ class UpdateDatabaseUseCase {
             this.pathToFolder.concat('/', this.zipFile),
         );
 
-        // await this.wfoRepository.dropRecordTable();
-
+        await this.wfoRepository.updateDatabaseStatus('unstable');
         await this.updateDatabase(this.pathToDataFile);
 
         await this.wfoRepository.updateVersion(newVersion);
+        await this.wfoRepository.updateDatabaseStatus('stable');
     }
 }
 

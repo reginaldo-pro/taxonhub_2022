@@ -72,6 +72,42 @@ class WfoRepository implements IWfoRepository {
 
         return data.value;
     }
+
+    async updateDatabaseStatus(status: string): Promise<void> {
+        await this.prismaClient.meta.update({
+            where: {
+                key: 'dbStatus',
+            },
+            data: {
+                value: status,
+            },
+        });
+    }
+
+    private async saveDatabaseStatus(version: string): Promise<meta> {
+        const data = await this.prismaClient.meta.create({
+            data: {
+                key: 'dbStatus',
+                value: version,
+            },
+        });
+
+        return data;
+    }
+
+    async getDatabaseStatus(): Promise<string> {
+        let data = await this.prismaClient.meta.findUnique({
+            where: {
+                key: 'dbStatus',
+            },
+        });
+
+        if (!data) {
+            data = await this.saveDatabaseStatus('stable');
+        }
+
+        return data.value;
+    }
 }
 
 export { WfoRepository };
