@@ -1,0 +1,35 @@
+{
+  "name": "taxonhub_2022",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/caiotheodoro/taxonhub_2022",
+  "author": "matheusht <matheustheodoro3112@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "csv-parse": "^5.0.4",
+    "express": "^4.17.3",
+    "multer": "^1.4.4",
+    "selenium-webdriver": "^4.1.1",
+    "uuid": "^8.3.2"
+  },
+  "scripts": {
+    "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn src/server.ts"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/multer": "^1.4.7",
+    "@types/uuid": "^8.3.4",
+    "@typescript-eslint/eslint-plugin": "^5.17.0",
+    "@typescript-eslint/parser": "^5.17.0",
+    "commitizen": "^4.2.4",
+    "eslint": "^8.12.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^2.7.0",
+    "eslint-plugin-import-helpers": "^1.2.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "git-cz": "^4.8.0",
+    "prettier": "^2.6.1",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.6.3"
+  }
+}
