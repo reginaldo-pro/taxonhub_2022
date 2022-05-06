@@ -1,17 +1,28 @@
-import { v4 as uuidv4 } from 'uuid';
+import { EDataset } from './enumerators/types';
 
-class Taxonomy {
-    // model
+class TaxonomyModel {
+    searchedName: string;
+    returnedName: string;
+    acceptedNameOrSynonym: string;
+    synonymOf: string;
+    dataset: EDataset;
+    respectiveFamily: string;
 
-    id?: string;
-    name: string;
-    // adicionar restante
-
-    constructor() {
-        if (!this.id) {
-            this.id = uuidv4();
-        }
+    constructor(
+        searchedName: string,
+        returnedName: string,
+        acceptedNameOrSynonym: string,
+        synonymOf: string,
+        dataset: EDataset,
+        respectiveFamily: string,
+    ) {
+        this.searchedName = searchedName;
+        this.returnedName = returnedName;
+        this.acceptedNameOrSynonym = acceptedNameOrSynonym;
+        this.synonymOf = synonymOf;
+        this.dataset = dataset;
+        this.respectiveFamily = respectiveFamily;
     }
 }
 
-export { Taxonomy };
+export { TaxonomyModel };

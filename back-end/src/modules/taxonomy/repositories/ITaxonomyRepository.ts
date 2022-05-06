@@ -1,9 +1,7 @@
-import { Taxonomy } from '../../model/Taxonomy';
+import { IRecord } from 'src/modules/model/WFORecord';
 
 interface ITaxonomyRepository {
-    findByName(name: string): Taxonomy[];
-    list(): Taxonomy[];
-    // incluir metodos (filtro e etc)
+    getRecordByName(scientificName: string): Promise<IRecord>;
 }
 
 export { ITaxonomyRepository };

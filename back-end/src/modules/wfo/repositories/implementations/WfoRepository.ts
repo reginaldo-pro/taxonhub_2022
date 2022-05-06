@@ -1,8 +1,8 @@
 import { meta, PrismaClient } from '@prisma/client';
 import { IRecord } from 'src/modules/model/WFORecord';
 
+import { EMetaTableKeys, EMetaTableValues } from '../../enumerators/types';
 import { IWfoRepository } from '../IWfoRepository';
-import { EMetaTableKeys, EMetaTableValues } from '../types';
 
 class WfoRepository implements IWfoRepository {
     constructor(private prismaClient: PrismaClient) {}
@@ -15,6 +15,30 @@ class WfoRepository implements IWfoRepository {
         });
 
         return record as IRecord;
+    }
+
+    async getRecordsByName(scientificName: string): Promise<IRecord[]> {
+        const record = await this.prismaClient.record.findMany({
+            where: {
+                scientificName: {
+                    contains: scientificName,
+                },
+            },
+        });
+
+        return record as IRecord[];
+    }
+
+    async getManyRecordsByName(scientificNames: string[]): Promise<IRecord[]> {
+        const records = await this.prismaClient.record.findMany({
+            where: {
+                scientificName: {
+                    in: scientificNames,
+                },
+            },
+        });
+
+        return records as IRecord[];
     }
 
     async getRecord(taxonID: string): Promise<IRecord> {
@@ -109,14 +133,7 @@ class WfoRepository implements IWfoRepository {
     async updateDatabasePhaseStatus(status: string): Promise<void> {
         const data = await this.getDatabaseUpdateStatus();
 
-        await this.prismaClient.meta.update({
-            where: {
-                key: data.key,
-            },
-            data: {
-                value: status,
-            },
-        });
+        await this.updateMeta(data.key, status);
     }
 
     async updateDatabaseConsistencyStatus(status: string): Promise<void> {
