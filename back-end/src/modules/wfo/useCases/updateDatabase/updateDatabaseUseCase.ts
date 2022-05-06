@@ -3,8 +3,8 @@ import fs from 'fs';
 import { IRecord } from 'src/modules/model/WFORecord';
 
 import { pathToDataFile } from '../../constants';
+import { EMetaTableValues } from '../../enumerators/types';
 import { WfoRepository } from '../../repositories/implementations/WfoRepository';
-import { EMetaTableValues } from '../../repositories/types';
 
 const headers = [
     'taxonID',
@@ -66,15 +66,7 @@ class UpdateDatabaseUseCase {
                             return;
                         }
 
-                        const record = await this.wfoRepository.getRecord(
-                            data.taxonID,
-                        );
-
-                        if (!record) {
-                            await this.wfoRepository.saveRecord(data);
-                        } else {
-                            await this.wfoRepository.updateRecord(data);
-                        }
+                        await this.wfoRepository.saveRecord(data);
                     } catch (err) {
                         reject(new Error('Some error occurred.'));
                     }
@@ -85,13 +77,18 @@ class UpdateDatabaseUseCase {
         });
     }
 
-    async execute(newVersion: string) {
+    private async setDatabaseStatusOnUpdate() {
         await this.wfoRepository.updateDatabaseConsistencyStatus(
             EMetaTableValues.inconsistent,
         );
         await this.wfoRepository.updateDatabasePhaseStatus(
             EMetaTableValues.unstable,
         );
+    }
+
+    async execute(newVersion: string) {
+        await this.setDatabaseStatusOnUpdate();
+        await this.wfoRepository.dropRecordTable();
 
         try {
             await this.updateDatabase(pathToDataFile);
