@@ -7,6 +7,7 @@ interface IWfoRepository {
 
     getRecord(taxonID: string): Promise<IRecord>;
     getRecordByName(scientificName: string): Promise<IRecord>;
+    getRecordsByName(scientificName: string): Promise<IRecord[]>;
     saveRecord(data: IRecord): Promise<void>;
     updateRecord(data: IRecord): Promise<void>;
 

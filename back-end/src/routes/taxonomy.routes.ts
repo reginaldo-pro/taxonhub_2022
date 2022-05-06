@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Router } from 'express';
 import multer from 'multer';
+import { getTaxonomyByNameController } from 'src/modules/taxonomy/useCases/getTaxonomy';
 
-import { importCSVController } from '../modules/taxonomy/useCases/importCSV';
-import { listTaxonomiesController } from '../modules/taxonomy/useCases/listTaxonomies';
+// import { importCSVController } from '../modules/taxonomy/useCases/importCSV';
 
 const taxonomyRoutes = Router();
 const upload = multer({
@@ -12,15 +13,16 @@ const upload = multer({
     },
 });
 
-taxonomyRoutes.get('/', (req, res) => {
+taxonomyRoutes.get('/', (_req, res) => {
     res.send('Hello taxonomy');
 });
 
-taxonomyRoutes.get('/list', (req, res) => {
-    return listTaxonomiesController.handle(req, res);
+taxonomyRoutes.get('/specie', (req, res) => {
+    return getTaxonomyByNameController.handle(req, res);
 });
-taxonomyRoutes.post('/import', upload.single('file'), (req, res) => {
-    return importCSVController.handle(req, res);
-});
+
+// taxonomyRoutes.post('/import', upload.single('file'), (req, res) => {
+//     return importCSVController.handle(req, res);
+// });
 
 export { taxonomyRoutes };
