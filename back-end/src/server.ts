@@ -1,8 +1,8 @@
 import express from 'express';
 
 import managerCron from './manager-cron';
+import { EMetaTableValues } from './modules/wfo/enumerators/types';
 import { wfoRepository } from './modules/wfo/repositories';
-import { EMetaTableValues } from './modules/wfo/repositories/types';
 import { router } from './routes';
 
 const app = express();
