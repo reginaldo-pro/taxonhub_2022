@@ -1,32 +1,13 @@
-import { Taxonomy } from '../../../model/Taxonomy';
+import { IRecord } from 'src/modules/model/WFORecord';
+import { WfoRepository } from 'src/modules/wfo/repositories/implementations/WfoRepository';
+
 import { ITaxonomyRepository } from '../ITaxonomyRepository';
 
 class TaxonomyRepository implements ITaxonomyRepository {
-    private taxonomies: Taxonomy[];
-    private static INSTANCE: TaxonomyRepository;
+    constructor(private wfoRepository: WfoRepository) {}
 
-    private constructor() {
-        this.taxonomies = [];
-    }
-
-    public static getInstance(): TaxonomyRepository {
-        if (!TaxonomyRepository.INSTANCE) {
-            TaxonomyRepository.INSTANCE = new TaxonomyRepository();
-        }
-
-        return TaxonomyRepository.INSTANCE;
-    }
-
-    list(): Taxonomy[] {
-        return this.taxonomies;
-    }
-
-    findByName(name: string): Taxonomy[] {
-        const taxonomies = this.taxonomies.filter(
-            (taxonomy) => taxonomy.name === name
-        );
-
-        return taxonomies;
+    async getRecordByName(scientificName: string): Promise<IRecord> {
+        return this.wfoRepository.getRecordByName(scientificName);
     }
 }
 
