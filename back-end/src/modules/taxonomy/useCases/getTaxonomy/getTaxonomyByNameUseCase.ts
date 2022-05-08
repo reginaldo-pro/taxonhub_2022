@@ -2,7 +2,7 @@ import puppeteer from 'puppeteer';
 import { TaxonomyException } from 'src/modules/exception/TaxonomyException';
 import { DefaultResponse } from 'src/modules/http/defaultResponse';
 import { EHttpStatuses } from 'src/modules/http/httpStatus';
-import { EDataset } from 'src/modules/model/enumerators/types';
+import { EDataset, ETaxonomyName } from 'src/modules/model/enumerators/types';
 import { TaxonomyModel } from 'src/modules/model/Taxonomy';
 
 import { TaxonomyRepository } from '../../repositories/implementations/TaxonomyRepository';
@@ -75,10 +75,9 @@ class GetTaxonomyByNameUseCase {
             return cleanData;
         }
 
-        const acceptedNameFromSynonym =
-            searchedNameData[this.acceptedNameFromSynonymPosition];
-
         if (nameStatus === ENameType.synonym) {
+            const acceptedNameFromSynonym =
+                searchedNameData[this.acceptedNameFromSynonymPosition];
             const cleanData: IFetchData[] = [];
 
             cleanData.push({
@@ -103,17 +102,30 @@ class GetTaxonomyByNameUseCase {
             return {
                 name: row[this.namePosition],
                 status: row[this.arrayStatusPosition],
-                synonymOf: acceptedNameFromSynonym,
+                synonymOf: acceptedName,
             };
         });
 
         cleanData.unshift({
             name: acceptedName,
             status: nameStatus,
-            synonymOf: null,
+            synonymOf: '',
         });
 
         return cleanData;
+    }
+
+    private convertStatusToPTBR(status: string): string {
+        switch (status.toLocaleLowerCase()) {
+            case 'accepted':
+                return ETaxonomyName.ACCEPTED;
+            case 'synonym':
+                return ETaxonomyName.SYNONYM;
+            case 'unresolved':
+                return ETaxonomyName.UNRESOLVED;
+            default:
+                throw new Error(`Unknown status: ${status}`);
+        }
     }
 
     async execute(scientificName: string): Promise<TaxonomyModel[]> {
@@ -136,7 +148,7 @@ class GetTaxonomyByNameUseCase {
             const firtInstance = new TaxonomyModel(
                 scientificName,
                 fetchedData[0].name,
-                fetchedData[0].status,
+                this.convertStatusToPTBR(fetchedData[0].status),
                 fetchedData[0].synonymOf,
                 EDataset.WFO,
                 returnedData.family,
@@ -149,15 +161,15 @@ class GetTaxonomyByNameUseCase {
                 const searchedName = scientificName;
                 const returnedName = taxonomy.name;
                 const acceptedNameOrSynonym = taxonomy.status;
-                const { synonymOf } = taxonomy;
+                const synonymName = taxonomy.synonymOf;
                 const dataset = EDataset.WFO;
                 const respectiveFamily = returnedData.family;
 
                 const newTaxonomyData = new TaxonomyModel(
                     searchedName,
                     returnedName,
-                    acceptedNameOrSynonym,
-                    synonymOf,
+                    this.convertStatusToPTBR(acceptedNameOrSynonym),
+                    synonymName,
                     dataset,
                     respectiveFamily,
                 );
@@ -173,10 +185,10 @@ class GetTaxonomyByNameUseCase {
                 const instance = new TaxonomyModel(
                     scientificName,
                     e.message,
-                    null,
-                    null,
+                    '',
+                    '',
                     EDataset.WFO,
-                    null,
+                    '',
                 );
 
                 unfoundData.push(instance);

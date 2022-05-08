@@ -1,6 +1,7 @@
 export enum ETaxonomyName {
     ACCEPTED = 'nome_aceito',
-    SYNONYM = 'sninônimo',
+    SYNONYM = 'sinônimo',
+    UNRESOLVED = 'não resolvido',
 }
 
 export enum EDataset {
