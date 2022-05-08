@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { DefaultResponse } from 'src/modules/http/defaultResponse';
 
 import { GetDatabaseStatusUseCase } from './getDatabaseStatusUseCase';
 
@@ -6,13 +7,10 @@ class GetDatabaseStatusController {
     constructor(private getDatabaseStatusUseCase: GetDatabaseStatusUseCase) {}
 
     async handle(_request: Request, response: Response) {
-        try {
-            const data = await this.getDatabaseStatusUseCase.execute();
+        const data: DefaultResponse<unknown> =
+            await this.getDatabaseStatusUseCase.executeResponse();
 
-            return response.status(200).json(data);
-        } catch (error) {
-            return response.status(500).json({ error: error.message });
-        }
+        return response.status(data.status).json(data);
     }
 }
 
