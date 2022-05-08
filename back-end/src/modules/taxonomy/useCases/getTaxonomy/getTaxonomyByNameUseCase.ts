@@ -1,5 +1,8 @@
 import puppeteer from 'puppeteer';
-import { EDataset, ETaxonomyName } from 'src/modules/model/enumerators/types';
+import { TaxonomyException } from 'src/modules/exception/TaxonomyException';
+import { DefaultResponse } from 'src/modules/http/defaultResponse';
+import { EHttpStatuses } from 'src/modules/http/httpStatus';
+import { EDataset } from 'src/modules/model/enumerators/types';
 import { TaxonomyModel } from 'src/modules/model/Taxonomy';
 
 import { TaxonomyRepository } from '../../repositories/implementations/TaxonomyRepository';
@@ -7,12 +10,28 @@ import { TaxonomyRepository } from '../../repositories/implementations/TaxonomyR
 interface IFetchData {
     name: string;
     status: string;
+    synonymOf: string;
+}
+
+enum ENameType {
+    accepted = 'accepted',
+    synonym = 'synonym',
+    unresolved = 'unresolved',
 }
 
 class GetTaxonomyByNameUseCase {
+    private readonly nameDataStatusStringPosition = 2;
+    private readonly acceptedNameFromSynonymPosition = 3;
+    private readonly nameDataStatusPosition = 2;
+    private readonly namePosition = 0;
+    private readonly arrayStatusPosition = 1;
+    private readonly puppeteerTimeoutLimit = 180000;
+
     constructor(private taxonomyRepository: TaxonomyRepository) {}
 
     private divideIntoChunks(items: string[], size: number) {
+        if (items === null || items.length === 0) return [];
+
         const chunks = [];
         const its = [].concat(...items);
 
@@ -24,99 +43,179 @@ class GetTaxonomyByNameUseCase {
     }
 
     private async fetchData(link: string): Promise<IFetchData[]> {
-        try {
-            const browser = await puppeteer.launch();
-            const page = await browser.newPage();
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
 
-            await page.goto(link, { timeout: 180000 });
+        await page.goto(link, { timeout: this.puppeteerTimeoutLimit });
 
-            const searchedNameData = await page.$$eval('h1 span', (spans) =>
-                spans
-                    .map((span) => {
-                        return span.textContent;
-                    })
-                    .filter((e) => e),
-            );
+        const searchedNameData = await page.$$eval('h1 span', (spans) =>
+            spans
+                .map((span) => {
+                    return span.textContent.replace(/\n/g, '');
+                })
+                .filter((e) => e),
+        );
 
-            const synonyms = await page.evaluate(() => {
-                const tds = Array.from(
-                    document.querySelectorAll('table tr td'),
-                );
-                return tds.map((td) => td.textContent).filter((e) => e);
+        const acceptedName = searchedNameData[this.namePosition];
+
+        const nameStatus =
+            searchedNameData[this.nameDataStatusStringPosition].split(' ')[
+                this.nameDataStatusPosition
+            ];
+
+        if (nameStatus === ENameType.unresolved) {
+            const cleanData: IFetchData[] = [];
+
+            cleanData.push({
+                name: acceptedName,
+                status: nameStatus,
+                synonymOf: null,
             });
-
-            const chunks = this.divideIntoChunks(synonyms, 4);
-
-            const cleanData = chunks.map((array) => {
-                return {
-                    name: array[0],
-                    status: array[1],
-                };
-            });
-
-            cleanData.unshift({
-                name: searchedNameData[0],
-                status: ETaxonomyName.ACCEPTED,
-            });
-
-            await browser.close();
 
             return cleanData;
-        } catch (e) {
-            console.log(e);
-
-            return null;
         }
+
+        const acceptedNameFromSynonym =
+            searchedNameData[this.acceptedNameFromSynonymPosition];
+
+        if (nameStatus === ENameType.synonym) {
+            const cleanData: IFetchData[] = [];
+
+            cleanData.push({
+                name: acceptedName,
+                status: nameStatus,
+                synonymOf: acceptedNameFromSynonym,
+            });
+
+            return cleanData;
+        }
+
+        const synonyms = await page.evaluate(() => {
+            const tds = Array.from(document.querySelectorAll('table tr td'));
+            return tds.map((td) => td.textContent).filter((e) => e);
+        });
+
+        await browser.close();
+
+        const chunks = this.divideIntoChunks(synonyms, 4);
+
+        const cleanData = chunks.map((row) => {
+            return {
+                name: row[this.namePosition],
+                status: row[this.arrayStatusPosition],
+                synonymOf: acceptedNameFromSynonym,
+            };
+        });
+
+        cleanData.unshift({
+            name: acceptedName,
+            status: nameStatus,
+            synonymOf: null,
+        });
+
+        return cleanData;
     }
 
     async execute(scientificName: string): Promise<TaxonomyModel[]> {
-        const returnedData = await this.taxonomyRepository.getRecordByName(
-            scientificName,
-        );
-
-        if (returnedData === null) {
-            throw new Error(
-                `Specie with name ${scientificName} was not found.`,
+        try {
+            const returnedData = await this.taxonomyRepository.getRecordByName(
+                scientificName,
             );
+
+            if (returnedData === undefined || returnedData === null) {
+                throw new TaxonomyException(
+                    EHttpStatuses.BAD_REQUEST,
+                    `Specie with name ${scientificName} was not found.`,
+                );
+            }
+
+            const fetchedData = await this.fetchData(returnedData.tplId);
+
+            const taxonomies: TaxonomyModel[] = [];
+
+            const firtInstance = new TaxonomyModel(
+                scientificName,
+                fetchedData[0].name,
+                fetchedData[0].status,
+                fetchedData[0].synonymOf,
+                EDataset.WFO,
+                returnedData.family,
+            );
+
+            taxonomies.push(firtInstance);
+            fetchedData.shift();
+
+            fetchedData.forEach((taxonomy) => {
+                const searchedName = scientificName;
+                const returnedName = taxonomy.name;
+                const acceptedNameOrSynonym = taxonomy.status;
+                const { synonymOf } = taxonomy;
+                const dataset = EDataset.WFO;
+                const respectiveFamily = returnedData.family;
+
+                const newTaxonomyData = new TaxonomyModel(
+                    searchedName,
+                    returnedName,
+                    acceptedNameOrSynonym,
+                    synonymOf,
+                    dataset,
+                    respectiveFamily,
+                );
+
+                taxonomies.push(newTaxonomyData);
+            });
+
+            return taxonomies;
+        } catch (e: unknown) {
+            if (e instanceof TaxonomyException) {
+                const unfoundData: TaxonomyModel[] = [];
+
+                const instance = new TaxonomyModel(
+                    scientificName,
+                    e.message,
+                    null,
+                    null,
+                    EDataset.WFO,
+                    null,
+                );
+
+                unfoundData.push(instance);
+
+                return unfoundData;
+            }
+            if (e instanceof Error) {
+                throw new Error(e.message);
+            }
+        }
+        return null;
+    }
+
+    async executeResponse(
+        scientificName: string,
+    ): Promise<DefaultResponse<unknown>> {
+        try {
+            const response = await this.execute(scientificName);
+
+            return new DefaultResponse<TaxonomyModel[]>(
+                EHttpStatuses.SUCCESS,
+                response,
+            );
+        } catch (e: unknown) {
+            if (e instanceof TaxonomyException) {
+                return new DefaultResponse<string>(e.status, e.message);
+            }
+            if (e instanceof Error) {
+                return new DefaultResponse<string>(
+                    EHttpStatuses.INTERNAL_SERVER_ERROR,
+                    e.message,
+                );
+            }
         }
 
-        const fetchedData = await this.fetchData(returnedData.tplId);
-
-        const taxonomies: TaxonomyModel[] = [];
-
-        const firtInstance = new TaxonomyModel(
-            scientificName,
-            fetchedData[0].name,
-            fetchedData[0].status,
-            null,
-            EDataset.WFO,
-            returnedData.family,
+        return new DefaultResponse<string>(
+            EHttpStatuses.INTERNAL_SERVER_ERROR,
+            'An unknown error occurred.',
         );
-
-        taxonomies.push(firtInstance);
-        fetchedData.shift();
-
-        fetchedData.forEach((taxonomy) => {
-            const searchedName = scientificName;
-            const returnedName = taxonomy.name;
-            const acceptedNameOrSynonym = taxonomy.status;
-            const synonymOf = firtInstance.returnedName;
-            const dataset = EDataset.WFO;
-            const respectiveFamily = returnedData.family;
-
-            const newTaxonomyData = new TaxonomyModel(
-                searchedName,
-                returnedName,
-                acceptedNameOrSynonym,
-                synonymOf,
-                dataset,
-                respectiveFamily,
-            );
-
-            taxonomies.push(newTaxonomyData);
-        });
-
-        return taxonomies;
     }
 }
 
