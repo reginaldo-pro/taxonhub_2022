@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { DefaultResponse } from 'src/modules/http/defaultResponse';
 
 import { GetTaxonomyByNameUseCase } from './getTaxonomyByNameUseCase';
 
@@ -6,15 +7,12 @@ class GetTaxonomyByNameController {
     constructor(private getTaxonomyByNameUseCase: GetTaxonomyByNameUseCase) {}
 
     async handle(request: Request, response: Response) {
-        try {
-            const { name } = request.body;
+        const { name } = request.body;
 
-            const data = await this.getTaxonomyByNameUseCase.execute(name);
+        const data: DefaultResponse<unknown> =
+            await this.getTaxonomyByNameUseCase.executeResponse(name);
 
-            return response.status(200).json(data);
-        } catch (error) {
-            return response.status(500).json({ error: error.message });
-        }
+        return response.status(data.status).json(data);
     }
 }
 
