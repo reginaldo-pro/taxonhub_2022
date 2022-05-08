@@ -14,19 +14,28 @@ class DownloadNewDataUseCase {
             timeout: 180000,
         });
 
-        const pageUrls = await page.evaluate(() => {
+        const url = await page.evaluate(() => {
             return Array.from(document.links)
                 .map((link) => link.href)
                 .filter((link) => link.includes('zip'));
-        });
+        })[0];
+
+        if (url === undefined || url === null) {
+            throw new Error('Url was not found.');
+        }
 
         await browser.close();
 
-        return pageUrls[0];
+        return url;
     }
 
     private setPath(path: string) {
+        if (path === undefined || path === null) {
+            throw new Error('Path error.');
+        }
+
         fs.rmSync(path, { recursive: true, force: true });
+
         if (!fs.existsSync(path)) fs.mkdirSync(path);
     }
 
@@ -52,15 +61,21 @@ class DownloadNewDataUseCase {
     }
 
     async execute() {
-        const link = await this.getDownloadLink();
+        try {
+            const link = await this.getDownloadLink();
 
-        this.setPath(pathToFolder);
+            this.setPath(pathToFolder);
 
-        await this.downloadFile(
-            link,
-            pathToFolder,
-            pathToFolder.concat('/', zipFile),
-        );
+            await this.downloadFile(
+                link,
+                pathToFolder,
+                pathToFolder.concat('/', zipFile),
+            );
+        } catch (e: unknown) {
+            if (e instanceof Error) {
+                throw new Error(e.message);
+            }
+        }
     }
 }
 
