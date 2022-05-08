@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Router } from 'express';
 import multer from 'multer';
+import { generateCSVController } from 'src/modules/taxonomy/useCases/generateCSV';
 import { getTaxonomyByNameController } from 'src/modules/taxonomy/useCases/getTaxonomy';
 
 // import { importCSVController } from '../modules/taxonomy/useCases/importCSV';
@@ -19,6 +20,10 @@ taxonomyRoutes.get('/', (_req, res) => {
 
 taxonomyRoutes.get('/specie', (req, res) => {
     return getTaxonomyByNameController.handle(req, res);
+});
+
+taxonomyRoutes.get('/speciesTest', (req, res) => {
+    return generateCSVController.handle(req, res);
 });
 
 // taxonomyRoutes.post('/import', upload.single('file'), (req, res) => {
