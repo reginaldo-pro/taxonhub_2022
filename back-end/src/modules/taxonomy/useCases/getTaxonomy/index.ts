@@ -12,4 +12,5 @@ const getTaxonomyByNameController = new GetTaxonomyByNameController(
     getTaxonomyByNameUseCase,
 );
 
+export { getTaxonomyByNameUseCase };
 export { getTaxonomyByNameController };
