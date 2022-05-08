@@ -1,0 +1,3 @@
+class GenerateCSVUseCase {}
+
+export { GenerateCSVUseCase };
