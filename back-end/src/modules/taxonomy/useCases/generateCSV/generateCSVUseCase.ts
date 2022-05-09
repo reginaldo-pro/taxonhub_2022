@@ -9,10 +9,11 @@ import { v4 as uuid } from 'uuid';
 
 import { GetTaxonomyByNameUseCase } from '../getTaxonomy/getTaxonomyByNameUseCase';
 
-const headers = ['binomialName'];
+const headers = ['firstName', 'secondName'];
 
 interface IBinomialName {
-    binomialName: string;
+    firstName: string;
+    secondName: string;
 }
 
 class GenerateCSVUseCase {
@@ -37,9 +38,13 @@ class GenerateCSVUseCase {
 
         await data.reduce(async (promise, line: IBinomialName) => {
             await promise;
-            const specie: string = line.binomialName;
+
+            const { firstName } = line;
+            const { secondName } = line;
+            const specieName = `${firstName} ${secondName}`;
+
             const returnedSpecies = await this.getTaxonomyByNameUseCase.execute(
-                specie,
+                specieName,
             );
             returnedSpecies.forEach((species) => {
                 finalData.push(species);
