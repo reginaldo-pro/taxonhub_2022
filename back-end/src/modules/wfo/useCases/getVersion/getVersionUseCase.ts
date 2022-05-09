@@ -19,11 +19,13 @@ class GetVersionUseCase {
             timeout: this.puppeteerTimeoutLimit,
         });
 
-        const version = await page.$$eval('table thead tr td', (tds) =>
+        const fetchedData = await page.$$eval('table thead tr td', (tds) =>
             tds.map((td) => {
                 return td.textContent;
             }),
-        )[this.versionValuePositionOnPage];
+        );
+
+        const version = fetchedData[this.versionValuePositionOnPage];
 
         await browser.close();
 
@@ -43,6 +45,7 @@ class GetVersionUseCase {
                 'http://www.worldfloraonline.org/downloadData',
             );
             const savedVersion = await this.wfoRepository.getSavedVersion();
+
             const isUpdated = this.compareVersion(
                 versionFromWebsite,
                 savedVersion,

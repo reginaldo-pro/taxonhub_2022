@@ -9,62 +9,68 @@ import { v4 as uuid } from 'uuid';
 
 import { GetTaxonomyByNameUseCase } from '../getTaxonomy/getTaxonomyByNameUseCase';
 
-const headers = ['firstName', 'secondName'];
+const headers = ['binomialName'];
 
 interface IBinomialName {
-    firstName: string;
-    secondName: string;
+    binomialName: string;
 }
 
 class GenerateCSVUseCase {
+    private readonly destFolder: string = './tmp/';
+
     constructor(private getTaxonomyByNameUseCase: GetTaxonomyByNameUseCase) {}
 
-    async execute(): Promise<TaxonomyModel[]> {
-        const finalData: TaxonomyModel[] = [];
+    async execute(entryDataPath: string): Promise<void> {
         const columnNames =
-            'Nome pesquisado,Nome retornado,Nome aceito/sinonimo,Sinônimo de,Base de dados(FDB/TPL(WFO)),Família respectiva da base de dados\n';
+            'Nome pesquisado,' +
+            'Nome retornado,' +
+            'Nome aceito/sinonimo,' +
+            'Sinônimo de,' +
+            'Base de dados(FDB/TPL(WFO)),' +
+            'Família respectiva da base de dados\n';
 
-        const fileId = uuid();
+        const fileId: string = uuid();
+        const outputFilePath = `${this.destFolder}${fileId}.csv`;
 
-        fs.writeFile(`./tmp/${fileId}.csv`, columnNames, (err) => {
+        fs.writeFile(outputFilePath, columnNames, (err) => {
             if (err) {
                 console.log(err);
             }
         });
 
         const data = await getStream.array(
-            fs.createReadStream('./test.csv').pipe(csvParser({ headers })),
+            fs.createReadStream(entryDataPath).pipe(csvParser({ headers })),
         );
 
         await data.reduce(async (promise, line: IBinomialName) => {
             await promise;
 
-            const { firstName } = line;
-            const { secondName } = line;
-            const specieName = `${firstName} ${secondName}`;
+            const { binomialName } = line;
 
             const returnedSpecies = await this.getTaxonomyByNameUseCase.execute(
-                specieName,
+                binomialName,
             );
+
+            const colletionOfSpecies: TaxonomyModel[] = [];
+
             returnedSpecies.forEach((species) => {
-                finalData.push(species);
+                colletionOfSpecies.push(species);
+            });
+
+            const csv = new ObjectsFromCsv(colletionOfSpecies);
+
+            await csv.toDisk(outputFilePath, {
+                append: true,
             });
         }, Promise.resolve());
-
-        const csv = new ObjectsFromCsv(finalData);
-        await csv.toDisk(`./tmp/${fileId}.csv`, {
-            append: true,
-        });
-
-        return finalData;
     }
 
     async executeResponse(): Promise<DefaultResponse<unknown>> {
-        const data = await this.execute();
+        await this.execute('./test.csv');
 
         return new DefaultResponse<TaxonomyModel[]>(
             EHttpStatuses.SUCCESS,
-            data,
+            null,
         );
     }
 }
