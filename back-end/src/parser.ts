@@ -3,7 +3,6 @@ import { Readable } from "stream";
 import readline from "readline";
 
 export default {
-    
     async postArquivo(req: Request, res: Response) {
         const arrayNames = []
         const b = req.file?.buffer
