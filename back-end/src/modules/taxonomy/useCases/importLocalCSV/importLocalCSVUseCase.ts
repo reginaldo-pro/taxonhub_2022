@@ -3,7 +3,7 @@ import fs from 'fs';
 
 import { ITaxonomyRepository } from '../../repositories/ITaxonomyRepository';
 
-interface IImportCSV {
+export interface IImportCSV {
     // dados arquivo csv
     name1: string;
     name2: string;
