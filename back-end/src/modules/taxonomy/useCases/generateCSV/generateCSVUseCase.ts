@@ -5,7 +5,8 @@ import ObjectsFromCsv from 'objects-to-csv';
 import { DefaultResponse } from 'src/modules/http/defaultResponse';
 import { EHttpStatuses } from 'src/modules/http/httpStatus';
 import { TaxonomyModel } from 'src/modules/model/Taxonomy';
-import { v4 as uuid } from 'uuid';
+import { EMetaTableValues } from 'src/modules/wfo/enumerators/types';
+import { WfoRepository } from 'src/modules/wfo/repositories/implementations/WfoRepository';
 
 import { GetTaxonomyByNameUseCase } from '../getTaxonomy/getTaxonomyByNameUseCase';
 
@@ -18,9 +19,12 @@ interface IBinomialName {
 class GenerateCSVUseCase {
     private readonly destFolder: string = './tmp/';
 
-    constructor(private getTaxonomyByNameUseCase: GetTaxonomyByNameUseCase) {}
+    constructor(
+        private getTaxonomyByNameUseCase: GetTaxonomyByNameUseCase,
+        private wfoRepository: WfoRepository,
+    ) {}
 
-    async execute(entryDataPath: string): Promise<void> {
+    async execute(entryDataPath: string, userId: string): Promise<void> {
         const columnNames =
             'Nome pesquisado,' +
             'Nome retornado,' +
@@ -29,7 +33,7 @@ class GenerateCSVUseCase {
             'Base de dados(FDB/TPL(WFO)),' +
             'Família respectiva da base de dados\n';
 
-        const fileId: string = uuid();
+        const fileId: string = userId;
         const outputFilePath = `${this.destFolder}${fileId}.csv`;
 
         fs.writeFile(outputFilePath, columnNames, (err) => {
@@ -65,13 +69,20 @@ class GenerateCSVUseCase {
         }, Promise.resolve());
     }
 
-    async executeResponse(): Promise<DefaultResponse<unknown>> {
-        await this.execute('./test.csv');
-
-        return new DefaultResponse<TaxonomyModel[]>(
-            EHttpStatuses.SUCCESS,
-            null,
+    async executeResponse(userId: string): Promise<DefaultResponse<unknown>> {
+        this.wfoRepository.updateDatabaseConsistencyStatus(
+            EMetaTableValues.inUsage,
         );
+
+        const binomialNames = `${userId}-binomialNames.csv`;
+
+        await this.execute(binomialNames, userId);
+
+        this.wfoRepository.updateDatabaseConsistencyStatus(
+            EMetaTableValues.consistent,
+        );
+
+        return new DefaultResponse<unknown>(EHttpStatuses.SUCCESS, 'done');
     }
 }
 

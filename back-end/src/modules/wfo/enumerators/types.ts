@@ -5,11 +5,14 @@ export enum EMetaTableKeys {
 }
 
 export enum EMetaTableValues {
-    stable = 'stable',
-    unstable = 'unstable',
+    // for the user
     consistent = 'consistent',
     inconsistent = 'inconsistent',
 
+    // for the system
+    stable = 'stable',
+    unstable = 'unstable',
+    inUsage = 'inUsage',
     errorOnUpdate = 'errorOnUpdate',
     needToCheck = 'needToCheck',
 }
