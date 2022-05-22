@@ -10,6 +10,7 @@
     "commit": "yarn git-cz --disable-emoji"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "commitizen": "^4.2.4",
     "express": "^4.18.1",
     "fast-csv": "^4.3.6",
