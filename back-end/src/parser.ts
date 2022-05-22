@@ -5,12 +5,15 @@ import readline from "readline";
 function validatorCSV(req: Request, res: Response){
     if(req.file?.mimetype !== 'text/csv'){
         res.send({Erro:'Tipo de arquivo não suportado, utilize um arquivo CSV.'}).status(400)
+        return false
     }
+    return true
 }
 
 export default {
     async postArquivo(req: Request, res: Response) {
-        validatorCSV(req, res)
+        if(!validatorCSV(req, res)) return 
+        
         const arrayNames = []
         const b = req.file?.buffer
         
