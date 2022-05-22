@@ -7,8 +7,6 @@ export class FloraDoBrasil {
 
     try {
       for (const especie of especies) {
-        console.log('searching ', `https://servicos.jbrj.gov.br/flora/taxon/${especie}`)
-
         const dadosFloraDoBrasil = await axios.get(
           `https://servicos.jbrj.gov.br/flora/taxon/${especie}`,
         )
@@ -17,7 +15,6 @@ export class FloraDoBrasil {
 
       return data
     } catch (err) {
-      console.log(err)
       throw err
     }
   }

@@ -1,16 +1,19 @@
 import { Request, Response } from 'express'
 import { FloraDoBrasil } from '../Services/FloraDoBrasil'
+import { ParserCSV } from '../Services/MulterParser'
 
 export class Controller {
   async buscaFloraDoBrasil(req: Request, res: Response) {
-    const { especie } = req.params
+    const parserCSV = new ParserCSV()
     const floraDoBrasil = new FloraDoBrasil()
 
+    const especies = await parserCSV.parserCSVtoJSON(req, res)
+
     try {
-      const dados = await floraDoBrasil.buscaEspecieFloraDoBrasil(['Eichhornia azurea'])
-      res.json(dados).status(200)
+      const dados = await floraDoBrasil.buscaEspecieFloraDoBrasil(especies)
+      res.send({ dados: dados }).status(200)
     } catch (err) {
-      res.json({ erro: 'Erro inesperado' }).status(400)
+      res.send({ erro: 'Erro inesperado' }).status(400)
     }
     return
   }
