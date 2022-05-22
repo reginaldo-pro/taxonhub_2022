@@ -16,21 +16,21 @@ const listFDBAzurea = [
       familia: "Pontederiaceae",
     },
     {
-        nomePesquisado: "Eichhornia azurea",
-        nomeRetornado: "Eichhornia azurea var. rhizantha Seub.",
-        aceitoSinonimo: "SINONIMO",
-        sinonimoDe: "Eichhornia azurea (Sw.) Kunth",
-        baseDados: "FDB",
-        familia: "Pontederiaceae",
-      },
-      {
-        nomePesquisado: "Eichhornia azurea",
-        nomeRetornado: "Eichhornia azurea var. rigida Seub.",
-        aceitoSinonimo: "SINONIMO",
-        sinonimoDe: "Eichhornia azurea (Sw.) Kunth",
-        baseDados: "FDB",
-        familia: "Pontederiaceae",
-      },
+      nomePesquisado: "Eichhornia azurea",
+      nomeRetornado: "Eichhornia azurea var. rhizantha Seub.",
+      aceitoSinonimo: "SINONIMO",
+      sinonimoDe: "Eichhornia azurea (Sw.) Kunth",
+      baseDados: "FDB",
+      familia: "Pontederiaceae",
+    },
+    {
+      nomePesquisado: "Eichhornia azurea",
+      nomeRetornado: "Eichhornia azurea var. rigida Seub.",
+      aceitoSinonimo: "SINONIMO",
+      sinonimoDe: "Eichhornia azurea (Sw.) Kunth",
+      baseDados: "FDB",
+      familia: "Pontederiaceae",
+    }
   ];
   
   module.exports = {listFDBAzurea};

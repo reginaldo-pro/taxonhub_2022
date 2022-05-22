@@ -1,5 +1,7 @@
 const axios = require("axios");
 const papa = require("papaparse");
+const himalaya = require('himalaya');
+
 module.exports = () => {
   const controller = {};
 
@@ -9,7 +11,8 @@ module.exports = () => {
     if (req.body !== undefined && req.body.names !== undefined && req.body.names.length > 0) {
       for (const nomeEspecie of req.body.names) {
         if (!isBlank(nomeEspecie)) {
-          let dados = await buscarEspecies(nomeEspecie);
+          let pesquisa = await buscarEspecies(nomeEspecie);
+          let dados = await formatarJson(pesquisa);
           const dadosFormatados = formatarDados(dados, nomeEspecie);
           resultados = resultados.concat(dadosFormatados);
         }
@@ -19,27 +22,19 @@ module.exports = () => {
   };
 
   const buscarEspecies = async (nomeEspecie) => {
-    return axios
-      .get("https://servicos.jbrj.gov.br/flora/#!/CheckList/get_taxon_scientificname", {
-        params: {
-          q: nomeEspecie
-        },
-        timeout: 10000,
-      })
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        if (error.response) {
-          throw new Error(`Erro na resposta: ${error.response.status}`);
-        } else if (error.request) {
-          throw new Error(`Erro na requisição: ${error.request}`);
-        } else {
-          throw new Error(
-            `Erro nas configurações da requisição: ${error.message}`
-          );
-        }
-      });
+    let url = "https://servicos.jbrj.gov.br/flora/taxon/" + nomeEspecie;
+    try {
+      return await axios.get(url)
+    } catch (error) {
+      console.error(error)
+    }
+  };
+
+  const formatarJson = async (dadosHtml) => {
+    dadosStr = dadosHtml.toString();
+    let saida = dadosStr.replace("Conectado com: 10.10.100.29", "");
+    saidaJson = himalaya.parse(saida);
+    return saidaJson;
   };
 
   const formatarDados = (dados, nomeEspecie) => {
@@ -55,24 +50,23 @@ module.exports = () => {
 
       return CriarObjetoRetorno(parse, nomeEspecie);
     } catch (error) {
-      throw new Error(`Erro formatação dos dados: ${error.message}`);
+      throw new Error(`Erro na formatação dos dados: ${error.message}`);
     }
 
     function CriarObjetoRetorno(parse, nomeEspecie) {
       let nomeAceito = "";
       return parse.data.map((row) => {
-        let nome =
-          row["Genus"] + " " + row["Species"] + " " + row["Authorship"];
-        if (row["Taxonomic status in FDB"] === "Accepted") nomeAceito = nome;
+        let nome = row["scientificname"];
+        if (row["taxonomicstatus"] === "NOME_ACEITO") nomeAceito = nome;
 
         return {
           nomePesquisado: nomeEspecie,
           nomeRetornado: nome,
 
-          aceitoSinonimo: row["Taxonomic status in FDB"] === "Accepted"? "nome_aceito": "sinonimo",
+          aceitoSinonimo: row["taxonomicstatus"] === "NOME_ACEITO"? "NOME_ACEITO": "SINONIMO",
           sinonimoDe: nomeAceito === nome ? "" : nomeAceito,
           baseDados: "FDB",
-          familia: row["Family"],
+          familia: row["family"],
         };
       });
     }
