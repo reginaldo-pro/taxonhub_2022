@@ -17,7 +17,7 @@ interface IBinomialName {
 }
 
 class GenerateCSVUseCase {
-    private readonly destFolder: string = './tmp/';
+    private readonly csvFolder: string = './tmp/';
 
     constructor(
         private getTaxonomyByNameUseCase: GetTaxonomyByNameUseCase,
@@ -34,7 +34,7 @@ class GenerateCSVUseCase {
             'Família respectiva da base de dados\n';
 
         const fileId: string = userId;
-        const outputFilePath = `${this.destFolder}${fileId}.csv`;
+        const outputFilePath = `${this.csvFolder}${fileId}.csv`;
 
         fs.writeFile(outputFilePath, columnNames, (err) => {
             if (err) {
@@ -74,7 +74,7 @@ class GenerateCSVUseCase {
             EMetaTableValues.inUsage,
         );
 
-        const binomialNames = `${userId}-binomialNames.csv`;
+        const binomialNames = `${this.csvFolder}${userId}-binomialNames.csv`;
 
         await this.execute(binomialNames, userId);
 
