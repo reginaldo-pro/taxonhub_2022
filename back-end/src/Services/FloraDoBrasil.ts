@@ -2,7 +2,6 @@ import axios from 'axios'
 
 export class FloraDoBrasil {
   async buscaEspecieFloraDoBrasil(especies: Array<string>) {
-    // const especies = ['Eichhornia azurea']
     const data = []
 
     try {
