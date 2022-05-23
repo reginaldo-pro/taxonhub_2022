@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model record {
+    id                       Int    @id @default(autoincrement())
+    taxonID                  String @unique
+    scientificNameID         String
+    localID                  String
+    scientificName           String
+    taxonRank                String
+    parentNameUsageID        String
+    scientificNameAuthorship String
+    family                   String
+    subfamily                String
+    tribe                    String
+    subtribe                 String
+    genus                    String
+    subgenus                 String
+    specificEpithet          String
+    infraspecificEpithet     String
+    verbatimTaxonRank        String
+    nomenclaturalStatus      String
+    namePublishedIn          String
+    taxonomicStatus          String
+    acceptedNameUsageID      String
+    originalNameUsageID      String
+    nameAccordingToID        String
+    taxonRemarks             String
+    created                  String
+    modified                 String
+    references               String
+    source                   String
+    majorGroup               String
+    tplId                    String
+}
+
+model meta {
+    key   String @id
+    value String
+}
