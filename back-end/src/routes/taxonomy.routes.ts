@@ -22,7 +22,7 @@ taxonomyRoutes.get('/specie', (req, res) => {
     return getTaxonomyByNameController.handle(req, res);
 });
 
-taxonomyRoutes.get('/speciesTest', (req, res) => {
+taxonomyRoutes.get('/generatecsv', (req, res) => {
     return generateCSVController.handle(req, res);
 });
 
