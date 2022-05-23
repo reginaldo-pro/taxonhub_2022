@@ -6,11 +6,11 @@ enum Database {
 interface LineTaxon {
   id: number | null,
   searchedSpeciesName: string,
-  returnedNames: string,
-  synonymOf: string,
+  returnedNames: string | null,
+  synonymOf: string | null,
   database: Database,
-  respectiveFamily: string,
-  autor: string,
+  respectiveFamily: string | null,
+  autor: string | null,
   found: boolean,
 }
 
@@ -28,11 +28,11 @@ export class OutputParser {
         taxon = {
           id: null,
           searchedSpeciesName: item['Name Searched'],
-          returnedNames: '',
-          synonymOf: '',
+          returnedNames: null,
+          synonymOf: null,
           database: Database.FDB,
-          respectiveFamily: '',
-          autor: '',
+          respectiveFamily: null,
+          autor: null,
           found: false,
         }
 
