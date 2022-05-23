@@ -6,7 +6,7 @@
   "author": "Lucas Donadi <lucasdonadi@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node-dev --transpile-only  --respawn --ignore-watch node_modules src/routes.ts",
+    "start": "ts-node-dev --transpile-only  --respawn --ignore-watch node_modules src/server.ts",
     "commit": "yarn git-cz --disable-emoji"
   },
   "dependencies": {
