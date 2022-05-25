@@ -1,12 +1,9 @@
-import { Flex } from '@chakra-ui/react'
 import type { NextPage } from 'next'
 
-const Search: NextPage = () => {
+const Index: NextPage = () => {
   return (
-    <Flex>
-        oi
-    </Flex>
+    <div></div>
   )
 }
 
-export default Search
+export default Index
