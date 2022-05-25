@@ -1,9 +1,12 @@
+import { Flex } from '@chakra-ui/react'
 import type { NextPage } from 'next'
 
-const Index: NextPage = () => {
+const Ocurrency: NextPage = () => {
   return (
-    <div></div>
+    <Flex>
+        oi
+    </Flex>
   )
 }
 
-export default Index
+export default Ocurrency
