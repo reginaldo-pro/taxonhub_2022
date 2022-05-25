@@ -1,7 +1,8 @@
 import { Flex } from '@chakra-ui/react'
 import type { NextPage } from 'next'
 
-const Search: NextPage = () => {
+const Ocurrency: NextPage = () => {
+
   return (
     <Flex>
         oi
@@ -9,4 +10,4 @@ const Search: NextPage = () => {
   )
 }
 
-export default Search
+export default Ocurrency
