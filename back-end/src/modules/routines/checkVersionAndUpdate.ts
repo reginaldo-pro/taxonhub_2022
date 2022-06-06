@@ -9,9 +9,13 @@ import { IVersionData } from '../wfo/useCases/getVersion/types';
 import { updateDatabaseUseCase } from '../wfo/useCases/updateDatabase';
 
 const checkVersionAndUpdate = async () => {
+    console.log('checking version..');
+
     const data: IVersionData = await getVersionUseCase.execute();
 
-    if (!data.isUpdated) {
+    console.log('Is updated:', data.isUpdated);
+
+    if (!data.isUpdated && data.versionFromWebsite) {
         await downloadNewDataUseCase.execute();
         await updateDatabaseUseCase.execute(data.versionFromWebsite);
     }
@@ -30,7 +34,7 @@ const execute = async () => {
     }
 };
 
-export default cron.schedule(
+const routine = cron.schedule(
     '*/20 * * * *',
     async () => {
         await execute();
@@ -39,3 +43,5 @@ export default cron.schedule(
         scheduled: false,
     },
 );
+
+export { checkVersionAndUpdate, routine };
