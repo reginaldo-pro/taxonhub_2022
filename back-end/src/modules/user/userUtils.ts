@@ -3,12 +3,18 @@ import { v4 as uuid } from 'uuid';
 
 import { EHttpStatuses } from '../http/httpStatus';
 
-function generateId(): DefaultResponse<unknown> {
-    return new DefaultResponse<string>(EHttpStatuses.SUCCESS, uuid());
+interface IUserDetails {
+    userID: string;
+}
+
+function generateId(): DefaultResponse<IUserDetails> {
+    return new DefaultResponse<IUserDetails>(EHttpStatuses.SUCCESS, {
+        userID: uuid(),
+    });
 }
 
 const userUtils = {
     generateId,
 };
 
-export { userUtils };
+export { userUtils, IUserDetails };
