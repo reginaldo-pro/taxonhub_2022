@@ -23,14 +23,14 @@ export function SearchBox() {
             borderRadius="full"
         >
             <Input
-                color="dark.grey"
+                color="gray.primary"
                 variant="unstyled"
                 placeholder="Buscar"
                 _placeholder={{ color: "gray.400" }}
                 ref={searchInputRef}
             />
 
-            <Icon as={RiSearchLine} fontSize="20" color="dark.grey" />
+            <Icon as={RiSearchLine} fontSize="20" color="gray.primary" />
         </Flex>
     )
 }

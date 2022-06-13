@@ -38,6 +38,7 @@ export function ActiveLink({
         borderRadius="full"
         _hover={!isActive ? { bg: "gray.100" } : {}}
         bg={isActive ? "green.light" : "transparent"}
+        minW={"260px"}
       >
         {cloneElement(children, {
           color: isActive ? "white" : "gray.primary",

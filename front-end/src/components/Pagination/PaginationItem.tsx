@@ -19,7 +19,7 @@ export function PaginationItem({
                 w='4'
                 disabled
                 _disabled={{
-                    bgColor: 'yellow.orange',
+                    bgColor: 'gray.500',
                     cursor: 'default'
                 }}
                 _hover={{
@@ -35,9 +35,9 @@ export function PaginationItem({
             size='sm'
             fontSize='xs'
             w='4'
-            bg='yellow.light'
+            bg='gray.200'
             _hover={{
-                bg: 'yellow.skin'
+                bg: 'gray.300'
             }}
             onClick={() => onPageChange(number)}
         >

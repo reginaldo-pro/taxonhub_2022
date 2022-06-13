@@ -14,7 +14,7 @@ export function CustomButton({children, onClick, icon,  ...rest}: ButtonProps) {
       {...rest}
       leftIcon={icon && <Icon as={icon} />}
         onClick={onClick}
-      fontFamily={"Roboto"}
+      fontFamily={"Poppins"}
         bgColor="green.light"
         _hover={{
             bg: "#ACBEA1",

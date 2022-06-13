@@ -1,12 +1,7 @@
 import {
     Box,
     Flex,
-    Link,
-    Button,
-    Icon,
-    Checkbox,
     Td,
-    Text,
     Table,
     Tbody,
     Thead,
@@ -14,9 +9,7 @@ import {
     Tr,
     useBreakpointValue,
   } from "@chakra-ui/react";
-  import { RiAddLine, RiFileCopy2Fill } from "react-icons/ri";
   import { Pagination } from "../Pagination/index";
-  import NextLink from "next/link";
   import { useState } from "react";
   import { SearchBox } from "../SearchBox";
 import { TaxonomiesListProps } from "../../pages/taxonomies";
@@ -29,24 +22,13 @@ import { TaxonomiesListProps } from "../../pages/taxonomies";
       base: false,
       lg: true,
     });
-  
+
     return (
-      <Box {...rest}>
-        <Flex w="100%" my="6" maxW={1480} mx="auto" px="6">
+      <Box {...rest}  >
+        <Flex w="100%" maxW={1480} mx="auto" px="6" mb="10">
           <Box flex="1" borderRadius={8} bg="green.light" p="6">
             <Flex mb="8" justify="space-between" align="center">
               <SearchBox />
-              {/* <NextLink href={"/users/create"} passHref>
-                <Button
-                  as="a"
-                  size="md"
-                  fontSize="sm"
-                  bg="yellow.orange"
-                  leftIcon={<Icon as={RiAddLine} fontSize="20" />}
-                >
-                  Gerar relatório
-                </Button>
-              </NextLink> */}
             </Flex>
             <>
               <Table colorScheme="blackAlpha">
@@ -55,8 +37,11 @@ import { TaxonomiesListProps } from "../../pages/taxonomies";
                     <Th px={["4", "4", "6"]} color="gray.900" w="8">
                       Base
                     </Th>
-                    <Th color="gray.primary">Nome Buscado</Th>
-                    {isWideVersion && <Th color="gray.primary">Nome encontrado</Th>}
+                    <Th color="gray.primary">Nome buscado</Th>
+                    <Th color="gray.primary">Nome retornado</Th>
+                    {isWideVersion && <Th color="gray.primary">Nome aceito/sinônimo</Th>}
+                    {isWideVersion && <Th color="gray.primary">Sinonimo de</Th>}
+                    {isWideVersion && <Th color="gray.primary">Familia respectiva</Th>}
                     <Th w="8"></Th>
                   </Tr>
                 </Thead>
@@ -72,6 +57,15 @@ import { TaxonomiesListProps } from "../../pages/taxonomies";
                         <Td color={"gray.dark"} maxW={170}>
                           {item.returnedName}
                         </Td>
+                        {isWideVersion && <Td color={"gray.dark"} maxW={170}>
+                          {item.acceptedNameOrSynonym}
+                        </Td>}
+                        {isWideVersion && <Td color={"gray.dark"} maxW={170}>
+                          {item.synonymOf}
+                        </Td>}
+                        {isWideVersion && <Td color={"gray.dark"} maxW={170}>
+                          {item.respectiveFamily}
+                        </Td>}
                     </Tr>
                   ))}
                 </Tbody>
