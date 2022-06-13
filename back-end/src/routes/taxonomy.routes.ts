@@ -1,25 +1,21 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Router } from 'express';
 import multer from 'multer';
+import { FILES_FOLDER } from 'src/modules/config/constants';
 import { generateCSVController } from 'src/modules/taxonomy/useCases/generateCSV';
-import { getTaxonomyByNameController } from 'src/modules/taxonomy/useCases/getTaxonomy';
-
-import { importLocalCSVController } from '../modules/taxonomy/useCases/importLocalCSV';
+import { importBinomialNameCSVController } from 'src/modules/taxonomy/useCases/importBinomialNameCSV';
 
 const taxonomyRoutes = Router();
-const upload = multer({
-    dest: './tmp',
-    limits: {
-        fileSize: 1000000,
+
+const storage = multer.diskStorage({
+    destination: FILES_FOLDER,
+    filename(req, file, cb) {
+        const { userId } = req.body;
+        cb(null, `${userId}-binomialNames.csv`);
     },
 });
 
-taxonomyRoutes.get('/', (_req, res) => {
-    res.send('Hello taxonomy');
-});
-
-taxonomyRoutes.get('/specie', (req, res) => {
-    return getTaxonomyByNameController.handle(req, res);
+const upload = multer({
+    storage,
 });
 
 taxonomyRoutes.get('/generatecsv', (req, res) => {
@@ -27,7 +23,7 @@ taxonomyRoutes.get('/generatecsv', (req, res) => {
 });
 
 taxonomyRoutes.post('/import', upload.single('file'), (req, res) => {
-    return importLocalCSVController.handle(req, res);
+    return importBinomialNameCSVController.handle(req, res);
 });
 
 export { taxonomyRoutes };
