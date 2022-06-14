@@ -22,6 +22,8 @@ export default {
         },
         gray: {
             'primary': '#1b1b1c',
+            'dark': '#2f2f2f',
+
         }
     }
 }

@@ -37,13 +37,17 @@ export function Navbar({ children }: NavProps) {
                             TextDecoration: "none",
                         }}
                     >
-                        <Text fontSize={{ base: "2xl", sm: "3xl", md: "4xl" }} fontWeight={"bold"} ml={{ base: '10px', sm: '10px', md: "40px", lg: "80px", xl: "100px" }}>
+
+                        <Text fontSize={{ base: "2xl", sm: "3xl", md: "4xl" }} fontWeight={"bold"}>
+
                             taxonhub
                         </Text>
                     </Link>
                 </Flex>
-                <Flex justify={"flex-end"} justifyContent={"center"} flexDir="column" align="center" w={{ base: "80%", sm: '50%', md: "40%", lg: "40%", xl: "30%" }} h="100%"  >
-                    <Stack mt="5" columnGap={{ sm: "8px", lg: "15px" }} direction="row">
+
+                <Flex justify={"flex-end"} justifyContent={"center"} flexDir="column" align="center" w={{ base: "40%", sm: '50%', md: "40%", lg: "40%", xl: "30%" }} h="100%"  >
+                    <Stack mt="5" columnGap={{ sm: "8px", lg: "15px" }} direction={{ base: "column", lg: "row" }}>
+
                         {LinkItems.map((link) => (
                             <ActiveLink key={link.name} href={link.href}>
                                 <NavItem icon={link.icon}>
