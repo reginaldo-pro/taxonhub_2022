@@ -5,6 +5,7 @@ import themeFile from '../theme/theme'
 import { useEffect, useState } from 'react'
 import { createRoot, Root } from 'react-dom/client';
 import { Navbar } from '../components/Navbar'
+import { TaxonomiesProvider } from '../hooks/useTaxonomies'
 const theme = extendTheme(themeFile)
 
 
@@ -25,9 +26,11 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   root.render(
     <ChakraProvider theme={theme}>
+      <TaxonomiesProvider>
       <Navbar>
         <Component {...pageProps} />
       </Navbar>
+      </TaxonomiesProvider>
     </ChakraProvider>
   )
 }

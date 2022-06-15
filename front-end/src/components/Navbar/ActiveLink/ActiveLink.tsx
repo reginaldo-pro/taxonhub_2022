@@ -29,7 +29,6 @@ export function ActiveLink({
       path.startsWith(String(rest.as));
   }, [path, shouldMatchExactHref, rest]);
 
-  console.log(isActive);
   return (
     <Link {...rest} >
       <a  onClick={() => router.push(rest.href)}>
