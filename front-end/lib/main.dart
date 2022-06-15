@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:front_end/screens/home.dart';
 
 void main() {
   runApp(const MaterialApp(home: MyApp()));
@@ -9,20 +10,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Taxon Hub'),
-        centerTitle: true,
-      ),
-      body: const Center(
-        child: Text(
-          'Hello World!',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 50,
-          ),
-        ),
-      ),
+    return const MaterialApp(
+      home: HomePage(),
     );
   }
 }
