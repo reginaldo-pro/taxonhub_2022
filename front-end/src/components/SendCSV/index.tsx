@@ -1,9 +1,12 @@
-import { Button, Input } from "@chakra-ui/react";
+import { Button, Flex, IconButton, Input, useOutsideClick } from "@chakra-ui/react";
 import { ChangeEvent, useRef, useState } from "react";
 import { FiUpload } from "react-icons/fi";
 import { toast } from "react-toastify";
 import React from "react";
 import { CustomButton } from "../CustomButton";
+import { IUseTaxonomies, useTaxonomies } from "../../hooks/useTaxonomies";
+import {FcInfo} from "react-icons/fc";
+import { InfoCardTaxonomy } from "../InfoCardTaxonomy";
 interface HTMLInputEvent extends ChangeEvent {
   target: HTMLInputElement & EventTarget;
 }
@@ -12,16 +15,22 @@ interface HTMLInputEvent extends ChangeEvent {
  *
  * @return {toast}
  */
-export function SendCSV() {
+export function SendCSV(): JSX.Element {
+  const { setFile, setStep } = useTaxonomies();
   const fileRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const [fileName, setFileName] = useState<string | undefined>("Enviar CSV");
+  const ref = useRef<HTMLButtonElement>(null)
+  const [visible, setVisible] = useState(false);
 
+
+ 
   const handleChange = (e: HTMLInputEvent) => {
     if (!e.target.files?.length) {
       return;
     }
 
     const files = e.target.files?.[0];
+    setFile(files);
 
     if (files?.name.split(".").pop() !== "csv") {
       return toast.error("Formato errado.");
@@ -32,12 +41,13 @@ export function SendCSV() {
     }
 
     setFileName(files?.name);
+    setStep(2);
     return toast.success("Arquivo adicionado.");
   };
 
   return (
-    <>
-      <CustomButton icon={FiUpload} onClick={() => fileRef.current.click()}>
+    <Flex position={"relative"}>
+      <CustomButton icon={FiUpload} onClick={() => fileRef.current?.click()}>
         {fileName}
       </CustomButton>
       <Input
@@ -48,6 +58,16 @@ export function SendCSV() {
         accept=".csv"
         sx={{ border: "none", display: "none" }}
       />
-    </>
+      <IconButton
+        borderRadius={"full"}
+        aria-label='Informação sobre o arquivo'
+        ref={ref}
+        ml="3"
+        onClick={() => setVisible(!visible)}
+      >
+        <FcInfo size={"20px"} />
+      </IconButton>
+      {visible && <InfoCardTaxonomy />}
+    </Flex>
   );
 }

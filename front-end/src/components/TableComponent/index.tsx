@@ -10,13 +10,18 @@ import {
     useBreakpointValue,
   } from "@chakra-ui/react";
   import { Pagination } from "../Pagination/index";
-  import { useState } from "react";
+  import { useEffect, useState } from "react";
   import { SearchBox } from "../SearchBox";
-import { TaxonomiesListProps } from "../../pages/taxonomies";
-  
+import { TaxonomiesListProps, TaxonomiesProps } from "../../hooks/useTaxonomies";
   
   export function TableComponent( {taxonomies, ...rest} : TaxonomiesListProps) {
     const [page, setPage] = useState(1);
+    const [items, setItems] = useState<TaxonomiesProps[]>([]);
+
+    useEffect(() => {
+      let newItems = taxonomies.slice((page - 1) * 3, page * 3);
+      setItems(newItems);
+    }, [page]);
   
     const isWideVersion = useBreakpointValue({
       base: false,
@@ -46,7 +51,7 @@ import { TaxonomiesListProps } from "../../pages/taxonomies";
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {taxonomies.map((item, index) => (
+                  {items.map((item, index) => (
                     <Tr key={index}>
                       <Td px={["4", "4", "6"]} fontWeight={"bold"} fontSize={"10px"}>
                         {item.dataset}
@@ -71,9 +76,9 @@ import { TaxonomiesListProps } from "../../pages/taxonomies";
                 </Tbody>
               </Table>
               <Pagination
-                totalCountOfRegisters={100}
+                totalCountOfRegisters={6}
                 currentPage={page}
-                registersPerPage={10}
+                registersPerPage={3}
                 onPageChange={setPage}
               />
             </>
