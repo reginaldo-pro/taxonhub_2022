@@ -4,7 +4,7 @@ import { DefaultResponse } from 'src/modules/http/defaultResponse';
 import { EHttpStatuses } from 'src/modules/http/httpStatus';
 
 interface IBinomialName {
-    binomialName: string;
+    BinomialName: string;
 }
 
 class ImportBinomialNameCSVUseCase {
@@ -22,11 +22,14 @@ class ImportBinomialNameCSVUseCase {
                     .on('data', async (row) => {
                         const name: IBinomialName = row;
 
+
+                        console.log(name)
                         if (!this.parseLine(name)) {
-                            incorrectNames.push(name.binomialName);
+                            incorrectNames.push(name.BinomialName);
                         }
                     })
                     .on('error', () => {
+                        console.log("error");
                         reject(new Error('error'));
                     })
                     .on('end', () => {
@@ -50,8 +53,8 @@ class ImportBinomialNameCSVUseCase {
     }
 
     private parseLine(line: IBinomialName): boolean {
-        const count = (line.binomialName.match(/ /g) || []).length;
-
+   
+        const count = line.BinomialName?.match(/\s/g)?.length;
         return count === 1;
     }
 }

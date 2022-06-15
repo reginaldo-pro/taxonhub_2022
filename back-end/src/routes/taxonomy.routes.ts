@@ -26,4 +26,11 @@ taxonomyRoutes.post('/import', upload.single('file'), (req, res) => {
     return importBinomialNameCSVController.handle(req, res);
 });
 
+taxonomyRoutes.get('/download', (req, res) => {
+    console.log('downloading taxonomies');
+    const { userId } = req.query;
+    res.download(`${FILES_FOLDER}/${userId}-taxonomy.csv`);
+}
+);
+
 export { taxonomyRoutes };
