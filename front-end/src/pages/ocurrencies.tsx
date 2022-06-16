@@ -38,7 +38,7 @@ const Ocurrencies = ({token}: TaxonomiesPageProps) => {
     },
     {
       title: 'Step 3',
-      component: <TableComponent dataset={dataset.dataset} />,
+      component: <TableComponent dataset={dataset.dataset} model={"occurrency"}  />,
       height: '590px',
     },
     {

@@ -23,13 +23,11 @@ class ImportBinomialNameCSVUseCase {
                         const name: IBinomialName = row;
 
 
-                        console.log(name)
                         if (!this.parseLine(name)) {
                             incorrectNames.push(name.BinomialName);
                         }
                     })
                     .on('error', () => {
-                        console.log("error");
                         reject(new Error('error'));
                     })
                     .on('end', () => {

@@ -38,7 +38,7 @@ const Taxonomies = ({token}: TaxonomiesPageProps) => {
     },
     {
       title: 'Step 3',
-      component: <TableComponent dataset={dataset.dataset} />,
+      component: <TableComponent dataset={dataset.dataset} model={"taxonomy"} />,
       height: '590px',
     },
     {

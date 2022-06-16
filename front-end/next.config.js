@@ -1,7 +1,10 @@
 /** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+};
 
 module.exports = {
-  reactStrictMode: true,
+  ...nextConfig,
   async redirects() {
     return [
       {
@@ -11,6 +14,4 @@ module.exports = {
       },
     ];
   },
-  }
-
-//withPlugins([optimizedImages], { target: 'serverless' }, module.exports = withPlugins([optimizedImages], { target: 'serverless',  /*devIndicators: { autoPrerender:false}*/ })
+};

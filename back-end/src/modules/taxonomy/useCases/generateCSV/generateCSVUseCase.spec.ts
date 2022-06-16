@@ -61,7 +61,6 @@ describe('Generate out CSV of Taxonomies', () => {
         await data.reduce((line) => {
             return line;
         });
-        console.log(data);
         expect(data[0]).toEqual({
             '': 'Nome pesquisado',
             _1: 'Nome retornado',

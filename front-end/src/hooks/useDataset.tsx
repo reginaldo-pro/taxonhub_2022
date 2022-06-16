@@ -28,12 +28,19 @@ export interface DatasetProps {
     searchedName: string;
     returnedName: string;
     acceptedNameOrSynonym: string;
-    synonymOf: string;
+    synonymOf?: string;
     dataset: EDataset;
     respectiveFamily: string;
+    country?: string;
+    year?: string;
+    month?: string;
+    day?: string;
+    latitude?: string;
+    longitude?: string;
   }
 
   export interface DatasetListProps {
+    model?: string;
     dataset: DatasetProps[];
   }
 
@@ -55,7 +62,6 @@ export function DatasetProvider({ children }: IProviderProps) {
     const formData = new FormData();
     formData.append("file", file);
 
-    console.log(token)
     const { data } = await api.post("/import", formData, {
       params: {
         userId: token,
@@ -103,20 +109,34 @@ export function DatasetProvider({ children }: IProviderProps) {
         //clear undefined values of csvArray
          
 
-
        setDataset({dataset: csvArray.filter(item => item !== undefined && item !== '').map((row, index) => {
-        return {
-          searchedName: row[0],
-          returnedName: row[1],
-          acceptedNameOrSynonym: row[2],
-          synonymOf: row[3],
-          dataset: row[4] === "WFO" ? EDataset.WFO : EDataset.GBIF,
-          respectiveFamily: row[5],
-
+        if(model === 'occurrency'){
+          return {
+            searchedName: row[0],
+            returnedName: row[1],
+            acceptedNameOrSynonym: row[2],
+            dataset: row[3] === "WFO" ? EDataset.WFO : EDataset.GBIF,
+            respectiveFamily: row[4],
+            country: row[5],
+            year: row[6],
+            month: row[7],
+            day: row[8],
+            latitude: row[9],
+            longitude: row[10],
+          }
+        }
+        else {
+          return {
+            searchedName: row[0],
+            returnedName: row[1],
+            acceptedNameOrSynonym: row[2],
+            synonymOf: row[3],
+            dataset: row[4] === "WFO" ? EDataset.WFO : EDataset.GBIF,
+            respectiveFamily: row[5],
+          }
         }
       })})
 
-        console.log(csvArray)
         
        
     }

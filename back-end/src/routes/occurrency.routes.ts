@@ -8,7 +8,6 @@ ocurrencyRoutes.get('/generatecsv', (req, res) => {
 });
 
 ocurrencyRoutes.get('/download', (req, res) => {
-    console.log('downloading taxonomies');
     const { userId } = req.query;
     res.download(`${FILES_FOLDER}/${userId}-occurrency.csv`);
 }
