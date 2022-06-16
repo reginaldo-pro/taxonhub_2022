@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:front_end/routes/routes.dart';
 import 'package:front_end/screens/home/home.dart';
 import 'package:front_end/screens/main.dart';
+import 'package:front_end/widgets/modals/modal.dart';
 import 'package:vrouter/vrouter.dart';
 import 'package:front_end/utils/extensions.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -44,6 +45,10 @@ class _AppTaxonHubState extends State<AppTaxonHub> {
             VWidget(
               path: RoutesApp.home,
               widget: const HomePage(),
+            ),
+            VWidget(
+              path: RoutesApp.model,
+              widget: const ModalCustomApp(),
             ),
           ],
         ),
