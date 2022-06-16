@@ -1,0 +1,8 @@
+{
+    "importl10n": {
+        "scope": "dart,flutter",
+        "prefix": "importext",
+        "body": "import 'package:front_end/utils/extensions.dart';",
+        "description": "Imports the project's extensions"
+    }
+}
