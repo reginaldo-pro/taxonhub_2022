@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:front_end/colors/colors.dart';
+import 'package:front_end/icons/icons.dart';
+import 'package:front_end/widgets/buttons/buttom_modal.dart';
 import 'package:front_end/widgets/buttons/buttom_search.dart';
 
 class HomePage extends StatelessWidget {
@@ -9,8 +12,8 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           ButtomSearch(
             title: 'Busca Taxonômica',
@@ -21,6 +24,31 @@ class HomePage extends StatelessWidget {
           ),
           ButtomSearch(
             title: 'Busca de Ocorrências',
+            onPressed: () {},
+          ),
+          const SizedBox(
+            width: 30,
+          ),
+          ButtonModal(
+            title: 'Cancel',
+            color: ColorsApp.backButton,
+            onPressed: () {},
+          ),
+          const SizedBox(
+            width: 30,
+          ),
+          ButtonModal(
+            title: 'OK',
+            color: ColorsApp.confirmButton,
+            onPressed: () {},
+          ),
+          const SizedBox(
+            width: 30,
+          ),
+          ButtonModal(
+            title: 'Importar arquivo',
+            iconData: IconsApp.uploud,
+            color: ColorsApp.fileButton,
             onPressed: () {},
           ),
         ],
