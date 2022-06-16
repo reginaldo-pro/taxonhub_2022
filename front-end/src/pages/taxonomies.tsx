@@ -8,7 +8,7 @@ import { TableComponent } from '../components/TableComponent'
 import { api } from '../services/api'
 import { v4 as uuidv4 } from 'uuid'
 import { parseCookies, setCookie } from 'nookies'
-import { useTaxonomies } from '../hooks/useTaxonomies'
+import { useDataset } from '../hooks/useDataset'
 import { DoSearch } from '../components/DoSearch'
 
 
@@ -20,8 +20,8 @@ interface TaxonomiesPageProps {
   token: string;
 }
 
-const Home = ({token}: TaxonomiesPageProps) => {
-  const {step, taxonomies } = useTaxonomies();
+const Taxonomies = ({token}: TaxonomiesPageProps) => {
+  const {step, dataset } = useDataset();
 
 
 
@@ -33,12 +33,12 @@ const Home = ({token}: TaxonomiesPageProps) => {
     },
     {
       title: 'Step 2',
-      component: <DoSearch token={token} />,
+      component: <DoSearch token={token} model={"taxonomy"} />,
       height: '150px',
     },
     {
       title: 'Step 3',
-      component: <TableComponent taxonomies={taxonomies.taxonomies} />,
+      component: <TableComponent dataset={dataset.dataset} />,
       height: '590px',
     },
     {
@@ -90,7 +90,7 @@ const Home = ({token}: TaxonomiesPageProps) => {
   )
 }
 
-export default Home
+export default Taxonomies
 
 
 export const getServerSideProps = async (ctx: any) => {

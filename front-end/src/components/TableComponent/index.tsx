@@ -8,20 +8,21 @@ import {
     Th,
     Tr,
     useBreakpointValue,
+    Text,
   } from "@chakra-ui/react";
   import { Pagination } from "../Pagination/index";
   import { useEffect, useState } from "react";
   import { SearchBox } from "../SearchBox";
-import { TaxonomiesListProps, TaxonomiesProps } from "../../hooks/useTaxonomies";
+import { DatasetListProps, DatasetProps, useDataset } from "../../hooks/useDataset";
   
-  export function TableComponent( {taxonomies, ...rest} : TaxonomiesListProps) {
+  export function TableComponent( {...rest} : DatasetListProps) {
+    const {dataset} = useDataset()
     const [page, setPage] = useState(1);
-    const [items, setItems] = useState<TaxonomiesProps[]>([]);
-
+    const [items, setItems] = useState<DatasetProps[]>([]);
     useEffect(() => {
-      let newItems = taxonomies.slice((page - 1) * 3, page * 3);
+      let newItems = dataset.dataset.slice((page - 1) * 3, page * 3);
       setItems(newItems);
-    }, [page]);
+    }, [page, dataset.dataset]);
   
     const isWideVersion = useBreakpointValue({
       base: false,
@@ -33,7 +34,9 @@ import { TaxonomiesListProps, TaxonomiesProps } from "../../hooks/useTaxonomies"
         <Flex w="100%" maxW={1480} mx="auto" px="6" mb="10">
           <Box flex="1" borderRadius={8} bg="green.light" p="6">
             <Flex mb="8" justify="space-between" align="center">
-              <SearchBox />
+              <Text px={["4", "4", "6"]} fontSize="lg" fontWeight="medium" color="gray.900">
+              PREVIEW DOS DADOS
+              </Text>
             </Flex>
             <>
               <Table colorScheme="blackAlpha">
@@ -76,7 +79,7 @@ import { TaxonomiesListProps, TaxonomiesProps } from "../../hooks/useTaxonomies"
                 </Tbody>
               </Table>
               <Pagination
-                totalCountOfRegisters={6}
+                totalCountOfRegisters={dataset.dataset.length}
                 currentPage={page}
                 registersPerPage={3}
                 onPageChange={setPage}

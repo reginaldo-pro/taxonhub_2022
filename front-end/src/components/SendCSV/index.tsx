@@ -4,7 +4,7 @@ import { FiUpload } from "react-icons/fi";
 import { toast } from "react-toastify";
 import React from "react";
 import { CustomButton } from "../CustomButton";
-import { IUseTaxonomies, useTaxonomies } from "../../hooks/useTaxonomies";
+import { useDataset } from "../../hooks/useDataset";
 import {FcInfo} from "react-icons/fc";
 import { InfoCardTaxonomy } from "../InfoCardTaxonomy";
 interface HTMLInputEvent extends ChangeEvent {
@@ -16,7 +16,7 @@ interface HTMLInputEvent extends ChangeEvent {
  * @return {toast}
  */
 export function SendCSV(): JSX.Element {
-  const { setFile, setStep } = useTaxonomies();
+  const { setFile, setStep } = useDataset();
   const fileRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const [fileName, setFileName] = useState<string | undefined>("Enviar CSV");
   const ref = useRef<HTMLButtonElement>(null)

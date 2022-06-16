@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { cloneElement, ReactElement, useEffect, useMemo, useState } from "react";
 import React from "react";
 import { Flex } from "@chakra-ui/react";
+import { useDataset } from "../../../hooks/useDataset";
 
 interface ActiveLinkProps extends LinkProps {
   children: ReactElement;
@@ -15,23 +16,18 @@ export function ActiveLink({
   shouldMatchExactHref = false,
   ...rest
 }: ActiveLinkProps) {
-  const [path, setPath] = useState('');
-  const router = useRouter();
-  useEffect(() => {
-    setPath(window.location.pathname);
-  }, []);
-
+  const { asPath, push } = useRouter();
+  const { setStep} = useDataset()
 
   const isActive = useMemo(() => {
     return shouldMatchExactHref
-      ? path == (rest.href || path == rest.as)
-      : path.startsWith(String(rest.href)) ||
-      path.startsWith(String(rest.as));
-  }, [path, shouldMatchExactHref, rest]);
+      ? asPath == (rest.href || asPath == rest.as)
+      : (asPath.startsWith(String(rest.href))) || asPath.startsWith(String(rest.as))
+  }, [asPath, shouldMatchExactHref, rest]);
 
   return (
     <Link {...rest} >
-      <a  onClick={() => router.push(rest.href)}>
+      <a  onClick={() => [push(rest.href), !isActive && setStep(1)]}>
 
       <Flex
         borderRadius="full"

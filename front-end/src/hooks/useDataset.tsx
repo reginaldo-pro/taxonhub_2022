@@ -1,20 +1,18 @@
-import { parseCookies, setCookie } from "nookies";
-import { createContext, ReactNode, useContext, useRef, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 import { api } from "../services/api";
-import { v4 as uuidv4 } from "uuid";
 import { useToast } from "@chakra-ui/react";
-export interface IUseTaxonomies {
+export interface IUseDataset {
   file?: string | Blob;
   setFile: (file: File) => void;
   loading: boolean;
-  getTaxonomies: (token: string) => Promise<void>;
+  getData: (token: string, model: string) => Promise<void>;
   step: number;
   setStep: (step: number) => void;
- taxonomies: TaxonomiesListProps;
+  dataset: DatasetListProps;
 }
 
 
-const TaxonomiesContext = createContext<IUseTaxonomies>(null as any);
+const DatasetContext = createContext<IUseDataset>(null as any);
 
 interface IProviderProps {
   children: ReactNode;
@@ -26,7 +24,7 @@ export enum EDataset {
   }
   
   
-export interface TaxonomiesProps {
+export interface DatasetProps {
     searchedName: string;
     returnedName: string;
     acceptedNameOrSynonym: string;
@@ -35,8 +33,8 @@ export interface TaxonomiesProps {
     respectiveFamily: string;
   }
 
-  export interface TaxonomiesListProps {
-    taxonomies: TaxonomiesProps[];
+  export interface DatasetListProps {
+    dataset: DatasetProps[];
   }
 
   
@@ -45,14 +43,14 @@ export interface TaxonomiesProps {
   
   
 
-export function TaxonomiesProvider({ children }: IProviderProps) {
+export function DatasetProvider({ children }: IProviderProps) {
   const [file, setFile] = useState<string | Blob>('');
   const [step, setStep] = useState<number>(1);
   const [loading, setLoading] = useState(false);
-  const [taxonomies, setTaxonomies] = useState<TaxonomiesListProps>({taxonomies: []});
+  const [dataset, setDataset] = useState<DatasetListProps>({dataset: []});
   const toast = useToast();
 
-  const getTaxonomies = async (token: string) => {
+  const getData = async (token: string, model: string) => {
     setLoading(true);
     const formData = new FormData();
     formData.append("file", file);
@@ -79,7 +77,7 @@ export function TaxonomiesProvider({ children }: IProviderProps) {
         },
       )
       
-      const {data } = await api.get("/taxonomy/generatecsv", {
+      const {data } = await api.get(`/${model}/generatecsv`, {
         params: {
           userId: token,
         },
@@ -91,16 +89,22 @@ export function TaxonomiesProvider({ children }: IProviderProps) {
         return res;
       })
 
-       console.log(data)
        setLoading(false);
+
       //store data csv in array
         const csv = data
         //8 position array of csv
 
-        const csvArray = new Array(6).fill(0).map(
-          (_, i) => csv.split("\n")[i + 1].split(",")
+
+        const csvArray = new Array(15).fill(0).map(
+          (_, i) => csv.split("\n")[i + 1] && csv.split("\n")[i + 1].split(",")
         );
-       setTaxonomies({taxonomies: csvArray.map((row, index) => {
+        
+        //clear undefined values of csvArray
+         
+
+
+       setDataset({dataset: csvArray.filter(item => item !== undefined && item !== '').map((row, index) => {
         return {
           searchedName: row[0],
           returnedName: row[1],
@@ -112,7 +116,7 @@ export function TaxonomiesProvider({ children }: IProviderProps) {
         }
       })})
 
-        
+        console.log(csvArray)
         
        
     }
@@ -134,25 +138,25 @@ export function TaxonomiesProvider({ children }: IProviderProps) {
   }
 
   return (
-    <TaxonomiesContext.Provider
+    <DatasetContext.Provider
       value={{
         file,
         setFile,
         loading,
-        getTaxonomies,
+        getData,
         step,
         setStep,
-        taxonomies
+        dataset
       }
       }
     >
       {children}
-    </TaxonomiesContext.Provider>
+    </DatasetContext.Provider>
   ) as React.ReactElement;
 }
 
-export function useTaxonomies() {
-  const context = useContext(TaxonomiesContext);
+export function useDataset() {
+  const context = useContext(DatasetContext);
 
   return context;
 }
