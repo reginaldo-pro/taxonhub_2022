@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:front_end/colors/colors.dart';
+import 'package:front_end/icons/icons.dart';
 import 'package:front_end/routes/routes.dart';
+import 'package:front_end/widgets/buttons/button_modal.dart';
+import 'package:front_end/widgets/buttons/button_search.dart';
 import 'package:vrouter/vrouter.dart';
 
 class HomePage extends StatelessWidget {
@@ -10,13 +14,48 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: ElevatedButton(
-        onPressed: () {
-          context.vRouter.to(RoutesApp.model);
-        },
-        child: const Text(
-          'HomePage',
-        ),
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        children: [
+          ButtonSearch(
+            title: 'Busca Taxonômica',
+            onPressed: () {
+              context.vRouter.to(RoutesApp.model);
+            },
+          ),
+          const SizedBox(
+            width: 30,
+          ),
+          ButtonSearch(
+            title: 'Busca de Ocorrências',
+            onPressed: () {},
+          ),
+          const SizedBox(
+            width: 30,
+          ),
+          ButtonModal(
+            title: 'Cancel',
+            color: ColorsApp.backButton,
+            onPressed: () {},
+          ),
+          const SizedBox(
+            width: 30,
+          ),
+          ButtonModal(
+            title: 'OK',
+            color: ColorsApp.confirmButton,
+            onPressed: () {},
+          ),
+          const SizedBox(
+            width: 30,
+          ),
+          ButtonModal(
+            title: 'Importar arquivo',
+            iconData: IconsApp.uploud,
+            color: ColorsApp.fileButton,
+            onPressed: () {},
+          ),
+        ],
       ),
     );
   }

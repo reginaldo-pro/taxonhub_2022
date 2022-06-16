@@ -11,4 +11,11 @@ class ColorsApp {
   static const Color warning = Color.fromRGBO(237, 187, 86, 1.0);
   static const Color error = Color.fromRGBO(197, 57, 49, 1.0);
   static const Color success = Color.fromRGBO(0, 121, 85, 1.0);
+  static const Color greenButtonSearch = Color.fromRGBO(33, 159, 148, 1.0);
+  static const Color borderButtonSearch = Color.fromRGBO(255, 255, 255, 1.0);
+  static const Color textButtonSearch = Color.fromRGBO(255, 255, 255, 1.0);
+  static const Color textButtonModal = Color.fromRGBO(255, 255, 255, 1.0);
+  static const Color backButton = Color.fromRGBO(238, 16, 16, 1.0);
+  static const Color confirmButton = Color.fromRGBO(115, 206, 56, 1.0);
+  static const Color fileButton = Color.fromRGBO(33, 159, 148, 1.0);
 }
