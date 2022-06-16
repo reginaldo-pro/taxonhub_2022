@@ -1,7 +1,7 @@
 name: front_end
 description: Taxon Hub
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 
 version: 1.0.0+1
 
@@ -11,7 +11,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   cupertino_icons: ^1.0.2
+  vrouter: ^1.2.1
 
 dev_dependencies:
   flutter_test:
@@ -20,5 +23,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
   assets:
     - assets/
