@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/colors/colors.dart';
 import 'package:front_end/icons/icons.dart';
-import 'package:front_end/widgets/buttons/buttom_modal.dart';
-import 'package:front_end/widgets/buttons/buttom_search.dart';
+import 'package:front_end/widgets/buttons/button_modal.dart';
+import 'package:front_end/widgets/buttons/button_search.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key, this.child}) : super(key: key);
@@ -15,14 +15,14 @@ class HomePage extends StatelessWidget {
       child: Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          ButtomSearch(
+          ButtonSearch(
             title: 'Busca Taxonômica',
             onPressed: () {},
           ),
           const SizedBox(
             width: 30,
           ),
-          ButtomSearch(
+          ButtonSearch(
             title: 'Busca de Ocorrências',
             onPressed: () {},
           ),

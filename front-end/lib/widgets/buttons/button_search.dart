@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/colors/colors.dart';
 
-class ButtomSearch extends StatelessWidget {
-  const ButtomSearch({
+class ButtonSearch extends StatelessWidget {
+  const ButtonSearch({
     Key? key,
     required this.title,
     required this.onPressed,
@@ -18,12 +18,12 @@ class ButtomSearch extends StatelessWidget {
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
-          backgroundColor: ColorsApp.greenButtomSearch,
+          backgroundColor: ColorsApp.greenButtonSearch,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
           ),
           side: const BorderSide(
-            color: ColorsApp.borderButtomSearch,
+            color: ColorsApp.borderButtonSearch,
             width: 2,
           ),
         ),
@@ -32,7 +32,7 @@ class ButtomSearch extends StatelessWidget {
           child: Text(
             title,
             style: const TextStyle(
-              color: ColorsApp.textButtomSearch,
+              color: ColorsApp.textButtonModal,
               fontSize: 30,
               fontWeight: FontWeight.w500,
             ),
