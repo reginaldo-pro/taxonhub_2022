@@ -13,11 +13,11 @@ class Background extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: ColorsTheme.backgroundColor,
+        color: ColorsApp.backgroundColor,
         image: DecorationImage(
           image: AssetImage('image.png'),
           colorFilter: ColorFilter.mode(
-            ColorsTheme.backgroundColor,
+            ColorsApp.backgroundColor,
             BlendMode.dstOut,
           ),
           fit: BoxFit.cover,
