@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:front_end/colors/colors.dart';
-import 'package:vrouter/vrouter.dart';
+import 'package:front_end/widgets/modals/widgets/body_modal.dart';
+import 'package:front_end/widgets/modals/widgets/divider_custom_modal.dart';
+import 'package:front_end/widgets/modals/widgets/footer_modal.dart';
+import 'package:front_end/widgets/modals/widgets/header_model.dart';
 
 class ModalCustomApp extends StatefulWidget {
-  const ModalCustomApp({Key? key}) : super(key: key);
+  const ModalCustomApp({
+    Key? key,
+    required this.header,
+    required this.body,
+    required this.footer,
+  }) : super(key: key);
+
+  final HeaderModal header;
+  final BodyModal body;
+  final FooterModal footer;
 
   @override
   State<ModalCustomApp> createState() => _ModalCustomAppState();
@@ -16,8 +28,8 @@ class _ModalCustomAppState extends State<ModalCustomApp> {
       backgroundColor: ColorsApp.blursModalBackground,
       body: Center(
         child: Container(
-          width: 700,
-          height: 300,
+          width: 500,
+          height: 250,
           decoration: BoxDecoration(
             color: ColorsApp.backgroundModal,
             borderRadius: BorderRadius.circular(5),
@@ -42,93 +54,17 @@ class _ModalCustomAppState extends State<ModalCustomApp> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const HeaderModal(),
+                widget.header,
                 const DividerCustomModal(),
                 Expanded(
-                  child: Column(),
+                  child: widget.body,
                 ),
                 const DividerCustomModal(),
-                const FooterModal(),
+                widget.footer,
               ],
             );
           }),
         ),
-      ),
-    );
-  }
-}
-
-class DividerCustomModal extends StatelessWidget {
-  const DividerCustomModal({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Divider(
-      color: ColorsApp.dividerModel,
-      thickness: 1.0,
-      height: 1.0,
-    );
-  }
-}
-
-class FooterModal extends StatelessWidget {
-  const FooterModal({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      child: const Text('Close'),
-      onPressed: () => context.vRouter.pop(),
-    );
-  }
-}
-
-class HeaderModal extends StatelessWidget {
-  const HeaderModal({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.centerLeft,
-      margin: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 8,
-      ),
-      child: Row(
-        children: const [
-          Icon(
-            Icons.warning_amber_outlined,
-            size: 38,
-            color: ColorsApp.warning,
-          ),
-          Icon(
-            Icons.disabled_by_default_outlined,
-            size: 38,
-            color: ColorsApp.error,
-          ),
-          Icon(
-            Icons.check_circle_outline,
-            size: 38,
-            color: ColorsApp.success,
-          ),
-          SizedBox(
-            width: 15,
-          ),
-          Text(
-            'Importar arquivo',
-            textAlign: TextAlign.start,
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
       ),
     );
   }
