@@ -6,14 +6,17 @@ class TitleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'TaxonHUB',
-      textAlign: TextAlign.center,
-      style: TextStyle(
-        fontSize: 64,
-        fontWeight: FontWeight.bold,
-        overflow: TextOverflow.ellipsis,
-        color: ColorsApp.tropicalForest,
+    return Container(
+      alignment: Alignment.bottomCenter,
+      child: const Text(
+        'TaxonHUB',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 64,
+          fontWeight: FontWeight.bold,
+          overflow: TextOverflow.ellipsis,
+          color: ColorsApp.tropicalForest,
+        ),
       ),
     );
   }
