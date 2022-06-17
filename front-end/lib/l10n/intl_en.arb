@@ -1,3 +1,19 @@
 {
-  "title": "TaxonHub"
+  "title": "TaxonHub",
+  "labelNo": "No",
+  "labelYes": "Yes",
+  "labelBack": "Back",
+  "labelCancel": "Cancel",
+  "labelOK": "OK",
+  "labelImporting": "Importing...",
+  "labelImportingFile": "Importing file",
+  "titleWarningModal": "Warning",
+  "titleErrorModal": "Error",
+  "titleSuccessModal": "Export File",
+  "titleImportFileModal": "Import file",
+  "msgWarningModal": "Do you really want to cancel the import of the file?",
+  "msgErrorFileType": "The selected file is not a CSV file.",
+  "msgSuccessModal": "The search was successful.",
+  "labelButtonSearchOccurrence": "Search Occurrences",
+  "labelButtonTaxonomicSearch": "Taxonomic Search"
 }
