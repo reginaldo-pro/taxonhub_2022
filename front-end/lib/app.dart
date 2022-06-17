@@ -35,7 +35,6 @@ class _AppTaxonHubState extends State<AppTaxonHub> {
       onGenerateTitle: (context) => context.T.title,
       localizationsDelegates: T.localizationsDelegates,
       supportedLocales: T.supportedLocales,
-      theme: ThemeData(),
       routes: [
         VNester(
           path: RoutesApp.main,
