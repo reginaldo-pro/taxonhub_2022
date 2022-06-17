@@ -7,9 +7,9 @@ class ButtonModal extends StatefulWidget {
     this.color,
     this.iconData,
     required this.onPressed,
-    this.padding = const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+    this.padding = const EdgeInsets.symmetric(horizontal: 15, vertical: 16),
     this.textColor = ColorsApp.textButtonModal,
-    this.height = 45,
+    this.height = 36,
     Key? key,
   }) : super(key: key);
 
