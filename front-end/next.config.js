@@ -5,6 +5,7 @@ const nextConfig = {
 
 module.exports = {
   ...nextConfig,
+  optimizeFonts: true,
   async redirects() {
     return [
       {
@@ -15,3 +16,4 @@ module.exports = {
     ];
   },
 };
+

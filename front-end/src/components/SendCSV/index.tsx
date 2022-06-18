@@ -6,7 +6,7 @@ import React from "react";
 import { CustomButton } from "../CustomButton";
 import { useDataset } from "../../hooks/useDataset";
 import {FcInfo} from "react-icons/fc";
-import { InfoCardTaxonomy } from "../InfoCardTaxonomy";
+import { InfoCard } from "../InfoCard";
 interface HTMLInputEvent extends ChangeEvent {
   target: HTMLInputElement & EventTarget;
 }
@@ -67,7 +67,7 @@ export function SendCSV(): JSX.Element {
       >
         <FcInfo size={"20px"} />
       </IconButton>
-      {visible && <InfoCardTaxonomy />}
+      {visible && <InfoCard />}
     </Flex>
   );
 }

@@ -1,6 +1,6 @@
-import { Box, Flex, Table, TableContainer, Tbody, Td, Text, Tfoot, Th, Thead, Tr } from "@chakra-ui/react";
+import { Box, TableContainer, Text } from "@chakra-ui/react";
 
-export function InfoCardTaxonomy() {
+export function InfoCard() {
     return (
         <Box position={"absolute"} w="300px" mt="14" marginLeft={"20px"} h="50px" borderRadius="2px">
             Formato do header CSV:
