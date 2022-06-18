@@ -20,9 +20,8 @@ const LinkItems: Array<LinkItemProps> = [
 
 export function Navbar({ children }: NavProps) {
 
-
     return (
-        <Box w={"100%"} p={{ base: "1", sm: "3", lg: "5" }} h="100vh" position="relative" mb="10">
+        <Box w={"100%"} p={{ base: "1", sm: "3", lg: "5" }}  position="relative" mb="10">
             <Flex w="100%" h="80px" flexDir={"row"} justify="space-around" as="header" backdropFilter="saturate(100%) blur(4px)" position="fixed" zIndex={1000}>
                 <Flex justify={"flex-start"} align="center"  >
                     <Link onClick={() => {

@@ -9,7 +9,6 @@ class ImportCSVController {
             const { file } = request;
 
             const data = await this.importCategoryUseCase.execute(file); // faz a busca
-            console.log(data);
             return response.status(200).json({ ...data });
         } catch (error) {
             return response.status(400).json({ error: error.message });
