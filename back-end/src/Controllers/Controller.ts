@@ -14,14 +14,14 @@ export class Controller {
 
     try {
       const especies = await parserCSV.parserCSVtoJSON(req, res)
-      const dados = await floraDoBrasil.buscaEspecieFloraDoBrasil(especies)
+      const data = await floraDoBrasil.buscaEspecieFloraDoBrasil(especies)
 
-      const jsonSplited = formatters.splitJson(dados.toString())
+      const jsonSplited = formatters.splitJson(data.toString())
       const jsonFormatted = formatters.addNameSearchedToJson(jsonSplited, especies)
 
-      const data = outputParser.parseOutputFloraDoBrasil(jsonFormatted)
+      const parsedData = outputParser.parseOutputFloraDoBrasil(jsonFormatted)
 
-      return res.status(200).send({ dados: jsonFormatted })
+      return res.status(200).send({ data: parsedData })
     } catch (err) {
       return res.status(400).send({ erro: 'Erro inesperado' })
     }
@@ -30,11 +30,13 @@ export class Controller {
   async buscaSpeciesLink(req: Request, res: Response) {
     const parserCSV = new ParserCSV()
     const speciesLink = new SpeciesLink()
+    const outputParser = new OutputParser()
 
     try {
       const especies = await parserCSV.parserCSVtoJSON(req, res)
-      const dados = await speciesLink.buscaSpeciesLink(especies)
-      res.status(200).send(dados)
+      const data = await speciesLink.buscaSpeciesLink(especies)
+      const parsedData = outputParser.parseOutputSpeciesLink(data)
+      res.status(200).send({ data: parsedData })
     } catch (err) {
       res.status(400).send({ erro: 'Erro inesperado' })
     }
