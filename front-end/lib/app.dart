@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:front_end/bloc/searchs/searchs_bloc.dart';
 import 'package:front_end/routes/routes.dart';
 import 'package:front_end/screens/home/home.dart';
 import 'package:front_end/screens/main.dart';
@@ -25,28 +27,35 @@ class AppTaxonHub extends StatefulWidget {
 class _AppTaxonHubState extends State<AppTaxonHub> {
   @override
   Widget build(BuildContext context) {
-    return VRouter(
-      buildTransition: (animation, _, child) => FadeTransition(
-        opacity: animation,
-        child: child,
-      ),
-      debugShowCheckedModeBanner: false,
-      transitionDuration: const Duration(milliseconds: 50),
-      onGenerateTitle: (context) => context.T.title,
-      localizationsDelegates: T.localizationsDelegates,
-      supportedLocales: T.supportedLocales,
-      routes: [
-        VNester(
-          path: RoutesApp.main,
-          widgetBuilder: (child) => Main(child: child),
-          nestedRoutes: [
-            VWidget(
-              path: RoutesApp.home,
-              widget: const HomePage(),
-            ),
-          ],
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<SearchsBloc>(
+          create: (context) => SearchsBloc(),
         ),
       ],
+      child: VRouter(
+        buildTransition: (animation, _, child) => FadeTransition(
+          opacity: animation,
+          child: child,
+        ),
+        debugShowCheckedModeBanner: false,
+        transitionDuration: const Duration(milliseconds: 50),
+        onGenerateTitle: (context) => context.T.title,
+        localizationsDelegates: T.localizationsDelegates,
+        supportedLocales: T.supportedLocales,
+        routes: [
+          VNester(
+            path: RoutesApp.main,
+            widgetBuilder: (child) => Main(child: child),
+            nestedRoutes: [
+              VWidget(
+                path: RoutesApp.home,
+                widget: const HomePage(),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
