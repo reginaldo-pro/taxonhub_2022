@@ -4,7 +4,7 @@ import { Readable } from 'stream'
 
 function validatorCSV(req: Request, res: Response) {
   if (req.file?.mimetype !== 'text/csv') {
-    res.status(400).send({ Erro: 'Tipo de arquivo não suportado, utilize um arquivo CSV.' })
+    res.send({ Erro: 'Tipo de arquivo não suportado, utilize um arquivo CSV.' }).status(400)
     return false
   }
   return true
