@@ -1,5 +1,4 @@
 import axios from 'axios'
-import https from 'https'
 
 export class FloraDoBrasil {
   async buscaEspecieFloraDoBrasil(especies: Array<string>) {
@@ -9,11 +8,6 @@ export class FloraDoBrasil {
       for (const especie of especies) {
         const dadosFloraDoBrasil = await axios.get(
           `https://servicos.jbrj.gov.br/flora/taxon/${especie}`,
-          {
-            httpsAgent: new https.Agent({
-              rejectUnauthorized: false,
-            }),
-          },
         )
         data.push(dadosFloraDoBrasil.data)
       }
