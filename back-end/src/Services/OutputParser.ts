@@ -14,6 +14,18 @@ interface LineTaxon {
   found: boolean,
 }
 
+interface LineOcorrencia {
+  scientificName: string,
+  baseDeDados: "SPL",
+  family: string,
+  country?: string,
+  year?: number,
+  month?: number,
+  day?: number,
+  lat?: number,
+  long?: number,
+}
+
 export class OutputParser {
   parseOutputFloraDoBrasil(data: any): LineTaxon[] {
     var lines: LineTaxon[] = [];
@@ -109,5 +121,28 @@ export class OutputParser {
     }
 
     return lines;
+  }
+
+  parseOutputSpeciesLink(data: any): LineOcorrencia[] {
+    var lines: LineOcorrencia[] = [];
+
+    for (let item of data.result) {
+      const line: LineOcorrencia = {
+        scientificName: item.scientificName,
+        baseDeDados: "SPL",
+        family: item.family,
+        country: item.country,
+        year: item.year,
+        month: item.month,
+        day: item.day,
+        lat: item.decimalLatitude,
+        long: item.decimalLongitude,
+      }
+
+      lines.push(line)
+    }
+
+    return lines;
+
   }
 }
