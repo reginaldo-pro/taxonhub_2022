@@ -15,5 +15,6 @@
   "msgErrorFileType": "O arquivo selecionado não é do tipo CSV.",
   "msgSuccessModal": "A busca foi realizada com sucesso.",
   "labelButtonSearchOccurrence": "Busca de Ocorrências",
-  "labelButtonTaxonomicSearch": "Busca Taxonômica"
+  "labelButtonTaxonomicSearch": "Busca Taxonômica",
+  "labelUnexpectedError": "Ocorreu um erro inesperado. Tente novamente!"
 }
