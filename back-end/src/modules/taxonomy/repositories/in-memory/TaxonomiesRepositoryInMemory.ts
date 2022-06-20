@@ -1,5 +1,4 @@
 import { IRecord } from "src/modules/model/WFORecord";
-import { WfoRepository } from "src/modules/wfo/repositories/implementations/WfoRepository";
 import { WfoRepositoryInMemory } from "src/modules/wfo/repositories/in-memory/WfoRepositoryInMemory";
 import { ITaxonomyRepository } from "../ITaxonomyRepository";
 
