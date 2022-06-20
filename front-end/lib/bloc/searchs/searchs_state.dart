@@ -8,7 +8,9 @@ class SearchsState with _$SearchsState {
   const factory SearchsState.imported(PlatformFile file) = _Imported;
   const factory SearchsState.warning() = _Warning;
   const factory SearchsState.success({
-    required List<Taxonomic> taxonomicsList,
+    required List<Occurrence>? occurrenciesList,
+    required List<Taxonomic>? taxonomicsList,
+    required SearchType searchType,
     required String fileName,
   }) = _Success;
   const factory SearchsState.error(DefaultErrors error) = _Error;

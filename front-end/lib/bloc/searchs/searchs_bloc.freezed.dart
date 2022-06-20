@@ -18,10 +18,11 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$SearchsEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() init,
-    required TResult Function(SearchType searchType) import,
+    required TResult Function(SearchType searchType) init,
+    required TResult Function() import,
     required TResult Function(PlatformFile file) search,
-    required TResult Function(List<Taxonomic> taxonomicsList, String fileName)
+    required TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)
         export,
     required TResult Function() alert,
     required TResult Function() reset,
@@ -29,20 +30,24 @@ mixin _$SearchsEvent {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? init,
-    TResult Function(SearchType searchType)? import,
+    TResult Function(SearchType searchType)? init,
+    TResult Function()? import,
     TResult Function(PlatformFile file)? search,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? export,
+    TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)?
+        export,
     TResult Function()? alert,
     TResult Function()? reset,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? init,
-    TResult Function(SearchType searchType)? import,
+    TResult Function(SearchType searchType)? init,
+    TResult Function()? import,
     TResult Function(PlatformFile file)? search,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? export,
+    TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)?
+        export,
     TResult Function()? alert,
     TResult Function()? reset,
     required TResult orElse(),
@@ -101,6 +106,7 @@ class _$SearchsEventCopyWithImpl<$Res> implements $SearchsEventCopyWith<$Res> {
 abstract class _$$_InitCopyWith<$Res> {
   factory _$$_InitCopyWith(_$_Init value, $Res Function(_$_Init) then) =
       __$$_InitCopyWithImpl<$Res>;
+  $Res call({SearchType searchType});
 }
 
 /// @nodoc
@@ -111,67 +117,96 @@ class __$$_InitCopyWithImpl<$Res> extends _$SearchsEventCopyWithImpl<$Res>
 
   @override
   _$_Init get _value => super._value as _$_Init;
+
+  @override
+  $Res call({
+    Object? searchType = freezed,
+  }) {
+    return _then(_$_Init(
+      searchType == freezed
+          ? _value.searchType
+          : searchType // ignore: cast_nullable_to_non_nullable
+              as SearchType,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$_Init implements _Init {
-  const _$_Init();
+  const _$_Init(this.searchType);
+
+  @override
+  final SearchType searchType;
 
   @override
   String toString() {
-    return 'SearchsEvent.init()';
+    return 'SearchsEvent.init(searchType: $searchType)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_Init);
+        (other.runtimeType == runtimeType &&
+            other is _$_Init &&
+            const DeepCollectionEquality()
+                .equals(other.searchType, searchType));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(searchType));
+
+  @JsonKey(ignore: true)
+  @override
+  _$$_InitCopyWith<_$_Init> get copyWith =>
+      __$$_InitCopyWithImpl<_$_Init>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() init,
-    required TResult Function(SearchType searchType) import,
+    required TResult Function(SearchType searchType) init,
+    required TResult Function() import,
     required TResult Function(PlatformFile file) search,
-    required TResult Function(List<Taxonomic> taxonomicsList, String fileName)
+    required TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)
         export,
     required TResult Function() alert,
     required TResult Function() reset,
   }) {
-    return init();
+    return init(searchType);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? init,
-    TResult Function(SearchType searchType)? import,
+    TResult Function(SearchType searchType)? init,
+    TResult Function()? import,
     TResult Function(PlatformFile file)? search,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? export,
+    TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)?
+        export,
     TResult Function()? alert,
     TResult Function()? reset,
   }) {
-    return init?.call();
+    return init?.call(searchType);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? init,
-    TResult Function(SearchType searchType)? import,
+    TResult Function(SearchType searchType)? init,
+    TResult Function()? import,
     TResult Function(PlatformFile file)? search,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? export,
+    TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)?
+        export,
     TResult Function()? alert,
     TResult Function()? reset,
     required TResult orElse(),
   }) {
     if (init != null) {
-      return init();
+      return init(searchType);
     }
     return orElse();
   }
@@ -221,14 +256,17 @@ class _$_Init implements _Init {
 }
 
 abstract class _Init implements SearchsEvent {
-  const factory _Init() = _$_Init;
+  const factory _Init(final SearchType searchType) = _$_Init;
+
+  SearchType get searchType => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  _$$_InitCopyWith<_$_Init> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class _$$_ImportCopyWith<$Res> {
   factory _$$_ImportCopyWith(_$_Import value, $Res Function(_$_Import) then) =
       __$$_ImportCopyWithImpl<$Res>;
-  $Res call({SearchType searchType});
 }
 
 /// @nodoc
@@ -239,91 +277,72 @@ class __$$_ImportCopyWithImpl<$Res> extends _$SearchsEventCopyWithImpl<$Res>
 
   @override
   _$_Import get _value => super._value as _$_Import;
-
-  @override
-  $Res call({
-    Object? searchType = freezed,
-  }) {
-    return _then(_$_Import(
-      searchType == freezed
-          ? _value.searchType
-          : searchType // ignore: cast_nullable_to_non_nullable
-              as SearchType,
-    ));
-  }
 }
 
 /// @nodoc
 
 class _$_Import implements _Import {
-  const _$_Import(this.searchType);
-
-  @override
-  final SearchType searchType;
+  const _$_Import();
 
   @override
   String toString() {
-    return 'SearchsEvent.import(searchType: $searchType)';
+    return 'SearchsEvent.import()';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$_Import &&
-            const DeepCollectionEquality()
-                .equals(other.searchType, searchType));
+        (other.runtimeType == runtimeType && other is _$_Import);
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(searchType));
-
-  @JsonKey(ignore: true)
-  @override
-  _$$_ImportCopyWith<_$_Import> get copyWith =>
-      __$$_ImportCopyWithImpl<_$_Import>(this, _$identity);
+  int get hashCode => runtimeType.hashCode;
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() init,
-    required TResult Function(SearchType searchType) import,
+    required TResult Function(SearchType searchType) init,
+    required TResult Function() import,
     required TResult Function(PlatformFile file) search,
-    required TResult Function(List<Taxonomic> taxonomicsList, String fileName)
+    required TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)
         export,
     required TResult Function() alert,
     required TResult Function() reset,
   }) {
-    return import(searchType);
+    return import();
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? init,
-    TResult Function(SearchType searchType)? import,
+    TResult Function(SearchType searchType)? init,
+    TResult Function()? import,
     TResult Function(PlatformFile file)? search,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? export,
+    TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)?
+        export,
     TResult Function()? alert,
     TResult Function()? reset,
   }) {
-    return import?.call(searchType);
+    return import?.call();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? init,
-    TResult Function(SearchType searchType)? import,
+    TResult Function(SearchType searchType)? init,
+    TResult Function()? import,
     TResult Function(PlatformFile file)? search,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? export,
+    TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)?
+        export,
     TResult Function()? alert,
     TResult Function()? reset,
     required TResult orElse(),
   }) {
     if (import != null) {
-      return import(searchType);
+      return import();
     }
     return orElse();
   }
@@ -373,12 +392,7 @@ class _$_Import implements _Import {
 }
 
 abstract class _Import implements SearchsEvent {
-  const factory _Import(final SearchType searchType) = _$_Import;
-
-  SearchType get searchType => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  _$$_ImportCopyWith<_$_Import> get copyWith =>
-      throw _privateConstructorUsedError;
+  const factory _Import() = _$_Import;
 }
 
 /// @nodoc
@@ -443,10 +457,11 @@ class _$_Search implements _Search {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() init,
-    required TResult Function(SearchType searchType) import,
+    required TResult Function(SearchType searchType) init,
+    required TResult Function() import,
     required TResult Function(PlatformFile file) search,
-    required TResult Function(List<Taxonomic> taxonomicsList, String fileName)
+    required TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)
         export,
     required TResult Function() alert,
     required TResult Function() reset,
@@ -457,10 +472,12 @@ class _$_Search implements _Search {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? init,
-    TResult Function(SearchType searchType)? import,
+    TResult Function(SearchType searchType)? init,
+    TResult Function()? import,
     TResult Function(PlatformFile file)? search,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? export,
+    TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)?
+        export,
     TResult Function()? alert,
     TResult Function()? reset,
   }) {
@@ -470,10 +487,12 @@ class _$_Search implements _Search {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? init,
-    TResult Function(SearchType searchType)? import,
+    TResult Function(SearchType searchType)? init,
+    TResult Function()? import,
     TResult Function(PlatformFile file)? search,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? export,
+    TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)?
+        export,
     TResult Function()? alert,
     TResult Function()? reset,
     required TResult orElse(),
@@ -541,7 +560,10 @@ abstract class _Search implements SearchsEvent {
 abstract class _$$_ExportCopyWith<$Res> {
   factory _$$_ExportCopyWith(_$_Export value, $Res Function(_$_Export) then) =
       __$$_ExportCopyWithImpl<$Res>;
-  $Res call({List<Taxonomic> taxonomicsList, String fileName});
+  $Res call(
+      {List<Taxonomic>? taxonomicsList,
+      List<Occurrence>? occurrenciesList,
+      String fileName});
 }
 
 /// @nodoc
@@ -556,13 +578,18 @@ class __$$_ExportCopyWithImpl<$Res> extends _$SearchsEventCopyWithImpl<$Res>
   @override
   $Res call({
     Object? taxonomicsList = freezed,
+    Object? occurrenciesList = freezed,
     Object? fileName = freezed,
   }) {
     return _then(_$_Export(
       taxonomicsList: taxonomicsList == freezed
           ? _value._taxonomicsList
           : taxonomicsList // ignore: cast_nullable_to_non_nullable
-              as List<Taxonomic>,
+              as List<Taxonomic>?,
+      occurrenciesList: occurrenciesList == freezed
+          ? _value._occurrenciesList
+          : occurrenciesList // ignore: cast_nullable_to_non_nullable
+              as List<Occurrence>?,
       fileName: fileName == freezed
           ? _value.fileName
           : fileName // ignore: cast_nullable_to_non_nullable
@@ -575,14 +602,28 @@ class __$$_ExportCopyWithImpl<$Res> extends _$SearchsEventCopyWithImpl<$Res>
 
 class _$_Export implements _Export {
   const _$_Export(
-      {required final List<Taxonomic> taxonomicsList, required this.fileName})
-      : _taxonomicsList = taxonomicsList;
+      {required final List<Taxonomic>? taxonomicsList,
+      required final List<Occurrence>? occurrenciesList,
+      required this.fileName})
+      : _taxonomicsList = taxonomicsList,
+        _occurrenciesList = occurrenciesList;
 
-  final List<Taxonomic> _taxonomicsList;
+  final List<Taxonomic>? _taxonomicsList;
   @override
-  List<Taxonomic> get taxonomicsList {
+  List<Taxonomic>? get taxonomicsList {
+    final value = _taxonomicsList;
+    if (value == null) return null;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_taxonomicsList);
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<Occurrence>? _occurrenciesList;
+  @override
+  List<Occurrence>? get occurrenciesList {
+    final value = _occurrenciesList;
+    if (value == null) return null;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
   }
 
   @override
@@ -590,7 +631,7 @@ class _$_Export implements _Export {
 
   @override
   String toString() {
-    return 'SearchsEvent.export(taxonomicsList: $taxonomicsList, fileName: $fileName)';
+    return 'SearchsEvent.export(taxonomicsList: $taxonomicsList, occurrenciesList: $occurrenciesList, fileName: $fileName)';
   }
 
   @override
@@ -600,6 +641,8 @@ class _$_Export implements _Export {
             other is _$_Export &&
             const DeepCollectionEquality()
                 .equals(other._taxonomicsList, _taxonomicsList) &&
+            const DeepCollectionEquality()
+                .equals(other._occurrenciesList, _occurrenciesList) &&
             const DeepCollectionEquality().equals(other.fileName, fileName));
   }
 
@@ -607,6 +650,7 @@ class _$_Export implements _Export {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_taxonomicsList),
+      const DeepCollectionEquality().hash(_occurrenciesList),
       const DeepCollectionEquality().hash(fileName));
 
   @JsonKey(ignore: true)
@@ -617,43 +661,48 @@ class _$_Export implements _Export {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() init,
-    required TResult Function(SearchType searchType) import,
+    required TResult Function(SearchType searchType) init,
+    required TResult Function() import,
     required TResult Function(PlatformFile file) search,
-    required TResult Function(List<Taxonomic> taxonomicsList, String fileName)
+    required TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)
         export,
     required TResult Function() alert,
     required TResult Function() reset,
   }) {
-    return export(taxonomicsList, fileName);
+    return export(taxonomicsList, occurrenciesList, fileName);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? init,
-    TResult Function(SearchType searchType)? import,
+    TResult Function(SearchType searchType)? init,
+    TResult Function()? import,
     TResult Function(PlatformFile file)? search,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? export,
+    TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)?
+        export,
     TResult Function()? alert,
     TResult Function()? reset,
   }) {
-    return export?.call(taxonomicsList, fileName);
+    return export?.call(taxonomicsList, occurrenciesList, fileName);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? init,
-    TResult Function(SearchType searchType)? import,
+    TResult Function(SearchType searchType)? init,
+    TResult Function()? import,
     TResult Function(PlatformFile file)? search,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? export,
+    TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)?
+        export,
     TResult Function()? alert,
     TResult Function()? reset,
     required TResult orElse(),
   }) {
     if (export != null) {
-      return export(taxonomicsList, fileName);
+      return export(taxonomicsList, occurrenciesList, fileName);
     }
     return orElse();
   }
@@ -704,10 +753,12 @@ class _$_Export implements _Export {
 
 abstract class _Export implements SearchsEvent {
   const factory _Export(
-      {required final List<Taxonomic> taxonomicsList,
+      {required final List<Taxonomic>? taxonomicsList,
+      required final List<Occurrence>? occurrenciesList,
       required final String fileName}) = _$_Export;
 
-  List<Taxonomic> get taxonomicsList => throw _privateConstructorUsedError;
+  List<Taxonomic>? get taxonomicsList => throw _privateConstructorUsedError;
+  List<Occurrence>? get occurrenciesList => throw _privateConstructorUsedError;
   String get fileName => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$$_ExportCopyWith<_$_Export> get copyWith =>
@@ -752,10 +803,11 @@ class _$_Alert implements _Alert {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() init,
-    required TResult Function(SearchType searchType) import,
+    required TResult Function(SearchType searchType) init,
+    required TResult Function() import,
     required TResult Function(PlatformFile file) search,
-    required TResult Function(List<Taxonomic> taxonomicsList, String fileName)
+    required TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)
         export,
     required TResult Function() alert,
     required TResult Function() reset,
@@ -766,10 +818,12 @@ class _$_Alert implements _Alert {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? init,
-    TResult Function(SearchType searchType)? import,
+    TResult Function(SearchType searchType)? init,
+    TResult Function()? import,
     TResult Function(PlatformFile file)? search,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? export,
+    TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)?
+        export,
     TResult Function()? alert,
     TResult Function()? reset,
   }) {
@@ -779,10 +833,12 @@ class _$_Alert implements _Alert {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? init,
-    TResult Function(SearchType searchType)? import,
+    TResult Function(SearchType searchType)? init,
+    TResult Function()? import,
     TResult Function(PlatformFile file)? search,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? export,
+    TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)?
+        export,
     TResult Function()? alert,
     TResult Function()? reset,
     required TResult orElse(),
@@ -879,10 +935,11 @@ class _$_Reset implements _Reset {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() init,
-    required TResult Function(SearchType searchType) import,
+    required TResult Function(SearchType searchType) init,
+    required TResult Function() import,
     required TResult Function(PlatformFile file) search,
-    required TResult Function(List<Taxonomic> taxonomicsList, String fileName)
+    required TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)
         export,
     required TResult Function() alert,
     required TResult Function() reset,
@@ -893,10 +950,12 @@ class _$_Reset implements _Reset {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? init,
-    TResult Function(SearchType searchType)? import,
+    TResult Function(SearchType searchType)? init,
+    TResult Function()? import,
     TResult Function(PlatformFile file)? search,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? export,
+    TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)?
+        export,
     TResult Function()? alert,
     TResult Function()? reset,
   }) {
@@ -906,10 +965,12 @@ class _$_Reset implements _Reset {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? init,
-    TResult Function(SearchType searchType)? import,
+    TResult Function(SearchType searchType)? init,
+    TResult Function()? import,
     TResult Function(PlatformFile file)? search,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? export,
+    TResult Function(List<Taxonomic>? taxonomicsList,
+            List<Occurrence>? occurrenciesList, String fileName)?
+        export,
     TResult Function()? alert,
     TResult Function()? reset,
     required TResult orElse(),
@@ -977,7 +1038,11 @@ mixin _$SearchsState {
     required TResult Function() loading,
     required TResult Function(PlatformFile file) imported,
     required TResult Function() warning,
-    required TResult Function(List<Taxonomic> taxonomicsList, String fileName)
+    required TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)
         success,
     required TResult Function(DefaultErrors error) error,
   }) =>
@@ -989,7 +1054,12 @@ mixin _$SearchsState {
     TResult Function()? loading,
     TResult Function(PlatformFile file)? imported,
     TResult Function()? warning,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? success,
+    TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)?
+        success,
     TResult Function(DefaultErrors error)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -1000,7 +1070,12 @@ mixin _$SearchsState {
     TResult Function()? loading,
     TResult Function(PlatformFile file)? imported,
     TResult Function()? warning,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? success,
+    TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)?
+        success,
     TResult Function(DefaultErrors error)? error,
     required TResult orElse(),
   }) =>
@@ -1100,7 +1175,11 @@ class _$_Empty implements _Empty {
     required TResult Function() loading,
     required TResult Function(PlatformFile file) imported,
     required TResult Function() warning,
-    required TResult Function(List<Taxonomic> taxonomicsList, String fileName)
+    required TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)
         success,
     required TResult Function(DefaultErrors error) error,
   }) {
@@ -1115,7 +1194,12 @@ class _$_Empty implements _Empty {
     TResult Function()? loading,
     TResult Function(PlatformFile file)? imported,
     TResult Function()? warning,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? success,
+    TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)?
+        success,
     TResult Function(DefaultErrors error)? error,
   }) {
     return empty?.call();
@@ -1129,7 +1213,12 @@ class _$_Empty implements _Empty {
     TResult Function()? loading,
     TResult Function(PlatformFile file)? imported,
     TResult Function()? warning,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? success,
+    TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)?
+        success,
     TResult Function(DefaultErrors error)? error,
     required TResult orElse(),
   }) {
@@ -1234,7 +1323,11 @@ class _$_Initial implements _Initial {
     required TResult Function() loading,
     required TResult Function(PlatformFile file) imported,
     required TResult Function() warning,
-    required TResult Function(List<Taxonomic> taxonomicsList, String fileName)
+    required TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)
         success,
     required TResult Function(DefaultErrors error) error,
   }) {
@@ -1249,7 +1342,12 @@ class _$_Initial implements _Initial {
     TResult Function()? loading,
     TResult Function(PlatformFile file)? imported,
     TResult Function()? warning,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? success,
+    TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)?
+        success,
     TResult Function(DefaultErrors error)? error,
   }) {
     return initial?.call();
@@ -1263,7 +1361,12 @@ class _$_Initial implements _Initial {
     TResult Function()? loading,
     TResult Function(PlatformFile file)? imported,
     TResult Function()? warning,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? success,
+    TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)?
+        success,
     TResult Function(DefaultErrors error)? error,
     required TResult orElse(),
   }) {
@@ -1368,7 +1471,11 @@ class _$_Loading implements _Loading {
     required TResult Function() loading,
     required TResult Function(PlatformFile file) imported,
     required TResult Function() warning,
-    required TResult Function(List<Taxonomic> taxonomicsList, String fileName)
+    required TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)
         success,
     required TResult Function(DefaultErrors error) error,
   }) {
@@ -1383,7 +1490,12 @@ class _$_Loading implements _Loading {
     TResult Function()? loading,
     TResult Function(PlatformFile file)? imported,
     TResult Function()? warning,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? success,
+    TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)?
+        success,
     TResult Function(DefaultErrors error)? error,
   }) {
     return loading?.call();
@@ -1397,7 +1509,12 @@ class _$_Loading implements _Loading {
     TResult Function()? loading,
     TResult Function(PlatformFile file)? imported,
     TResult Function()? warning,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? success,
+    TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)?
+        success,
     TResult Function(DefaultErrors error)? error,
     required TResult orElse(),
   }) {
@@ -1527,7 +1644,11 @@ class _$_Imported implements _Imported {
     required TResult Function() loading,
     required TResult Function(PlatformFile file) imported,
     required TResult Function() warning,
-    required TResult Function(List<Taxonomic> taxonomicsList, String fileName)
+    required TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)
         success,
     required TResult Function(DefaultErrors error) error,
   }) {
@@ -1542,7 +1663,12 @@ class _$_Imported implements _Imported {
     TResult Function()? loading,
     TResult Function(PlatformFile file)? imported,
     TResult Function()? warning,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? success,
+    TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)?
+        success,
     TResult Function(DefaultErrors error)? error,
   }) {
     return imported?.call(file);
@@ -1556,7 +1682,12 @@ class _$_Imported implements _Imported {
     TResult Function()? loading,
     TResult Function(PlatformFile file)? imported,
     TResult Function()? warning,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? success,
+    TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)?
+        success,
     TResult Function(DefaultErrors error)? error,
     required TResult orElse(),
   }) {
@@ -1666,7 +1797,11 @@ class _$_Warning implements _Warning {
     required TResult Function() loading,
     required TResult Function(PlatformFile file) imported,
     required TResult Function() warning,
-    required TResult Function(List<Taxonomic> taxonomicsList, String fileName)
+    required TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)
         success,
     required TResult Function(DefaultErrors error) error,
   }) {
@@ -1681,7 +1816,12 @@ class _$_Warning implements _Warning {
     TResult Function()? loading,
     TResult Function(PlatformFile file)? imported,
     TResult Function()? warning,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? success,
+    TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)?
+        success,
     TResult Function(DefaultErrors error)? error,
   }) {
     return warning?.call();
@@ -1695,7 +1835,12 @@ class _$_Warning implements _Warning {
     TResult Function()? loading,
     TResult Function(PlatformFile file)? imported,
     TResult Function()? warning,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? success,
+    TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)?
+        success,
     TResult Function(DefaultErrors error)? error,
     required TResult orElse(),
   }) {
@@ -1761,7 +1906,11 @@ abstract class _$$_SuccessCopyWith<$Res> {
   factory _$$_SuccessCopyWith(
           _$_Success value, $Res Function(_$_Success) then) =
       __$$_SuccessCopyWithImpl<$Res>;
-  $Res call({List<Taxonomic> taxonomicsList, String fileName});
+  $Res call(
+      {List<Occurrence>? occurrenciesList,
+      List<Taxonomic>? taxonomicsList,
+      SearchType searchType,
+      String fileName});
 }
 
 /// @nodoc
@@ -1775,14 +1924,24 @@ class __$$_SuccessCopyWithImpl<$Res> extends _$SearchsStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? occurrenciesList = freezed,
     Object? taxonomicsList = freezed,
+    Object? searchType = freezed,
     Object? fileName = freezed,
   }) {
     return _then(_$_Success(
+      occurrenciesList: occurrenciesList == freezed
+          ? _value._occurrenciesList
+          : occurrenciesList // ignore: cast_nullable_to_non_nullable
+              as List<Occurrence>?,
       taxonomicsList: taxonomicsList == freezed
           ? _value._taxonomicsList
           : taxonomicsList // ignore: cast_nullable_to_non_nullable
-              as List<Taxonomic>,
+              as List<Taxonomic>?,
+      searchType: searchType == freezed
+          ? _value.searchType
+          : searchType // ignore: cast_nullable_to_non_nullable
+              as SearchType,
       fileName: fileName == freezed
           ? _value.fileName
           : fileName // ignore: cast_nullable_to_non_nullable
@@ -1795,22 +1954,39 @@ class __$$_SuccessCopyWithImpl<$Res> extends _$SearchsStateCopyWithImpl<$Res>
 
 class _$_Success implements _Success {
   const _$_Success(
-      {required final List<Taxonomic> taxonomicsList, required this.fileName})
-      : _taxonomicsList = taxonomicsList;
+      {required final List<Occurrence>? occurrenciesList,
+      required final List<Taxonomic>? taxonomicsList,
+      required this.searchType,
+      required this.fileName})
+      : _occurrenciesList = occurrenciesList,
+        _taxonomicsList = taxonomicsList;
 
-  final List<Taxonomic> _taxonomicsList;
+  final List<Occurrence>? _occurrenciesList;
   @override
-  List<Taxonomic> get taxonomicsList {
+  List<Occurrence>? get occurrenciesList {
+    final value = _occurrenciesList;
+    if (value == null) return null;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_taxonomicsList);
+    return EqualUnmodifiableListView(value);
   }
 
+  final List<Taxonomic>? _taxonomicsList;
+  @override
+  List<Taxonomic>? get taxonomicsList {
+    final value = _taxonomicsList;
+    if (value == null) return null;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  final SearchType searchType;
   @override
   final String fileName;
 
   @override
   String toString() {
-    return 'SearchsState.success(taxonomicsList: $taxonomicsList, fileName: $fileName)';
+    return 'SearchsState.success(occurrenciesList: $occurrenciesList, taxonomicsList: $taxonomicsList, searchType: $searchType, fileName: $fileName)';
   }
 
   @override
@@ -1819,14 +1995,20 @@ class _$_Success implements _Success {
         (other.runtimeType == runtimeType &&
             other is _$_Success &&
             const DeepCollectionEquality()
+                .equals(other._occurrenciesList, _occurrenciesList) &&
+            const DeepCollectionEquality()
                 .equals(other._taxonomicsList, _taxonomicsList) &&
+            const DeepCollectionEquality()
+                .equals(other.searchType, searchType) &&
             const DeepCollectionEquality().equals(other.fileName, fileName));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(_occurrenciesList),
       const DeepCollectionEquality().hash(_taxonomicsList),
+      const DeepCollectionEquality().hash(searchType),
       const DeepCollectionEquality().hash(fileName));
 
   @JsonKey(ignore: true)
@@ -1842,11 +2024,15 @@ class _$_Success implements _Success {
     required TResult Function() loading,
     required TResult Function(PlatformFile file) imported,
     required TResult Function() warning,
-    required TResult Function(List<Taxonomic> taxonomicsList, String fileName)
+    required TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)
         success,
     required TResult Function(DefaultErrors error) error,
   }) {
-    return success(taxonomicsList, fileName);
+    return success(occurrenciesList, taxonomicsList, searchType, fileName);
   }
 
   @override
@@ -1857,10 +2043,16 @@ class _$_Success implements _Success {
     TResult Function()? loading,
     TResult Function(PlatformFile file)? imported,
     TResult Function()? warning,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? success,
+    TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)?
+        success,
     TResult Function(DefaultErrors error)? error,
   }) {
-    return success?.call(taxonomicsList, fileName);
+    return success?.call(
+        occurrenciesList, taxonomicsList, searchType, fileName);
   }
 
   @override
@@ -1871,12 +2063,17 @@ class _$_Success implements _Success {
     TResult Function()? loading,
     TResult Function(PlatformFile file)? imported,
     TResult Function()? warning,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? success,
+    TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)?
+        success,
     TResult Function(DefaultErrors error)? error,
     required TResult orElse(),
   }) {
     if (success != null) {
-      return success(taxonomicsList, fileName);
+      return success(occurrenciesList, taxonomicsList, searchType, fileName);
     }
     return orElse();
   }
@@ -1930,10 +2127,14 @@ class _$_Success implements _Success {
 
 abstract class _Success implements SearchsState {
   const factory _Success(
-      {required final List<Taxonomic> taxonomicsList,
+      {required final List<Occurrence>? occurrenciesList,
+      required final List<Taxonomic>? taxonomicsList,
+      required final SearchType searchType,
       required final String fileName}) = _$_Success;
 
-  List<Taxonomic> get taxonomicsList => throw _privateConstructorUsedError;
+  List<Occurrence>? get occurrenciesList => throw _privateConstructorUsedError;
+  List<Taxonomic>? get taxonomicsList => throw _privateConstructorUsedError;
+  SearchType get searchType => throw _privateConstructorUsedError;
   String get fileName => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$$_SuccessCopyWith<_$_Success> get copyWith =>
@@ -2007,7 +2208,11 @@ class _$_Error implements _Error {
     required TResult Function() loading,
     required TResult Function(PlatformFile file) imported,
     required TResult Function() warning,
-    required TResult Function(List<Taxonomic> taxonomicsList, String fileName)
+    required TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)
         success,
     required TResult Function(DefaultErrors error) error,
   }) {
@@ -2022,7 +2227,12 @@ class _$_Error implements _Error {
     TResult Function()? loading,
     TResult Function(PlatformFile file)? imported,
     TResult Function()? warning,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? success,
+    TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)?
+        success,
     TResult Function(DefaultErrors error)? error,
   }) {
     return error?.call(this.error);
@@ -2036,7 +2246,12 @@ class _$_Error implements _Error {
     TResult Function()? loading,
     TResult Function(PlatformFile file)? imported,
     TResult Function()? warning,
-    TResult Function(List<Taxonomic> taxonomicsList, String fileName)? success,
+    TResult Function(
+            List<Occurrence>? occurrenciesList,
+            List<Taxonomic>? taxonomicsList,
+            SearchType searchType,
+            String fileName)?
+        success,
     TResult Function(DefaultErrors error)? error,
     required TResult orElse(),
   }) {
