@@ -6,6 +6,7 @@ export class SpeciesLink {
       Scientificname: especies,
       Format: 'JSON',
     })
+
     return dadosSpeciesLink.data
   }
 }
