@@ -71,7 +71,53 @@ class SearchsBloc extends Bloc<SearchsEvent, SearchsState> {
     });
 
     on<_Export>((event, emit) {
-      emit(const _Empty());
+      emit(const _Loading());
+
+      try {
+        var data = <List<String>>[
+          [
+            'id',
+            'Nome pesquisado',
+            'Nomes retornados',
+            'Nome aceito/sinonimo',
+            'Sinonimo de',
+            'Base de dados (FDB/TPL)',
+            'Família respectiva da base de dados',
+            'Autor',
+            'Encontrado'
+          ],
+        ];
+
+        data.addAll(event.taxonomicsList.map<List<String>>(
+          (item) {
+            final taxonomicRow = [
+              item.id.toString(),
+              item.searchedSpeciesName.toString(),
+              item.returnedNames.toString(),
+              null.toString(),
+              item.synonymOf.toString(),
+              item.database.toString(),
+              item.respectiveFamily.toString(),
+              item.autor.toString(),
+              item.found.toString(),
+            ];
+            return taxonomicRow;
+          },
+        ).toList());
+
+        String csvData = const ListToCsvConverter().convert(data);
+
+        html.AnchorElement()
+          ..href =
+              '${Uri.dataFromString(csvData, mimeType: 'text/csv', encoding: utf8)}'
+          ..download = event.fileName
+          ..style.display = 'none'
+          ..click();
+
+        emit(const _Empty());
+      } on DefaultErrors catch (err) {
+        emit(_Error(err));
+      }
     });
 
     on<_Alert>((event, emit) {

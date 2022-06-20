@@ -1,6 +1,9 @@
 import axios from 'axios'
 import https from 'https'
 
+axios.defaults.headers.common['Content-Type'] = 'application/json';
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+
 export class FloraDoBrasil {
   async buscaEspecieFloraDoBrasil(especies: Array<string>) {
     const data = []
