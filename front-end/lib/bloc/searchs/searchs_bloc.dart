@@ -27,7 +27,7 @@ class SearchsBloc extends Bloc<SearchsEvent, SearchsState> {
 
     on<_Init>((event, emit) {
       searchType = event.searchType;
-
+      emit(const _Loading());
       if (file != null) {
         emit(_Imported(file!));
       } else {
@@ -36,6 +36,7 @@ class SearchsBloc extends Bloc<SearchsEvent, SearchsState> {
     });
 
     on<_Import>((event, emit) async {
+      emit(const _Loading());
       emit(const _Initial());
 
       try {
@@ -180,6 +181,7 @@ class SearchsBloc extends Bloc<SearchsEvent, SearchsState> {
     });
 
     on<_Alert>((event, emit) {
+      emit(const _Loading());
       emit(const _Warning());
     });
 

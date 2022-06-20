@@ -52,6 +52,9 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         },
+        empty: () {
+          context.vRouter.pop();
+        },
         imported: (file) {
           context.vRouter.pop();
           Future.microtask(
