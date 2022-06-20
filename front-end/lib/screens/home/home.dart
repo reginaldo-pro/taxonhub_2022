@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front_end/bloc/searchs/searchs_bloc.dart';
+import 'package:front_end/colors/colors.dart';
 import 'package:front_end/utils/enums.dart';
 import 'package:front_end/utils/extensions.dart';
 import 'package:front_end/widgets/buttons/button_search.dart';
@@ -27,6 +28,7 @@ class _HomePageState extends State<HomePage> {
     context.read<SearchsBloc>().stream.listen((state) {
       state.maybeWhen(
         initial: () {
+          context.vRouter.pop();
           Future.microtask(
             () => showGeneralDialog(
               context: context,
@@ -34,7 +36,7 @@ class _HomePageState extends State<HomePage> {
                 return ModalImportFile(
                   onPressedImportFile: () {
                     context.read<SearchsBloc>().add(
-                          const SearchsEvent.import(SearchType.taxonomic),
+                          const SearchsEvent.import(),
                         );
                     context.vRouter.pop();
                   },
@@ -51,6 +53,7 @@ class _HomePageState extends State<HomePage> {
           );
         },
         imported: (file) {
+          context.vRouter.pop();
           Future.microtask(
             () => showGeneralDialog(
               context: context,
@@ -74,8 +77,26 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         },
-        loading: () {},
-        success: (taxonomicList, fileName) {
+        loading: () {
+          context.vRouter.pop();
+          Future.microtask(
+            () => showGeneralDialog(
+              context: context,
+              pageBuilder: (BuildContext context, _, __) {
+                return const Scaffold(
+                  backgroundColor: ColorsApp.blursModalBackground,
+                  body: Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        },
+        success: (occurrenceList, taxonomicList, searchType, fileName) {
+          context.vRouter.pop();
           Future.microtask(
             () => showGeneralDialog(
               context: context,
@@ -91,8 +112,12 @@ class _HomePageState extends State<HomePage> {
                     context.read<SearchsBloc>().add(
                           SearchsEvent.export(
                             taxonomicsList: taxonomicList,
+                            occurrenciesList: occurrenceList,
                             fileName: fileName,
                           ),
+                        );
+                    context.read<SearchsBloc>().add(
+                          const SearchsEvent.reset(),
                         );
                     context.vRouter.pop();
                   },
@@ -102,14 +127,16 @@ class _HomePageState extends State<HomePage> {
           );
         },
         warning: () {
+          context.vRouter.pop();
           Future.microtask(
             () => showGeneralDialog(
               context: context,
               pageBuilder: (BuildContext context, _, __) {
                 return ModalWarning(
                   onPressedNo: () {
+                    final searchType = context.read<SearchsBloc>().searchType!;
                     context.read<SearchsBloc>().add(
-                          const SearchsEvent.init(),
+                          SearchsEvent.init(searchType),
                         );
                     context.vRouter.pop();
                   },
@@ -125,14 +152,16 @@ class _HomePageState extends State<HomePage> {
           );
         },
         error: (err) {
+          context.vRouter.pop();
           Future.microtask(
             () => showGeneralDialog(
               context: context,
               pageBuilder: (BuildContext context, _, __) {
                 return ModalError(
                   onPressedBack: () {
+                    final searchType = context.read<SearchsBloc>().searchType!;
                     context.read<SearchsBloc>().add(
-                          const SearchsEvent.init(),
+                          SearchsEvent.init(searchType),
                         );
                     context.vRouter.pop();
                   },
@@ -160,13 +189,17 @@ class _HomePageState extends State<HomePage> {
             title: context.T.labelButtonTaxonomicSearch,
             onPressed: () {
               context.read<SearchsBloc>().add(
-                    const SearchsEvent.init(),
+                    const SearchsEvent.init(SearchType.taxonomic),
                   );
             },
           ),
           ButtonSearch(
             title: context.T.labelButtonSearchOccurrence,
-            onPressed: () {},
+            onPressed: () {
+              context.read<SearchsBloc>().add(
+                    const SearchsEvent.init(SearchType.occurrence),
+                  );
+            },
           ),
         ],
       ),

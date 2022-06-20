@@ -6,7 +6,9 @@ import 'package:bloc/bloc.dart';
 import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:front_end/models/occurrence_search/occurrence.dart';
 import 'package:front_end/models/taxonomic_search/taxonomic.dart';
+import 'package:front_end/services/ocurrence_search.dart';
 import 'package:front_end/services/request/request_handler.dart';
 import 'package:front_end/services/taxonomic_search.dart';
 import 'package:front_end/utils/enums.dart';
@@ -24,6 +26,8 @@ class SearchsBloc extends Bloc<SearchsEvent, SearchsState> {
     on<SearchsEvent>((event, emit) {});
 
     on<_Init>((event, emit) {
+      searchType = event.searchType;
+
       if (file != null) {
         emit(_Imported(file!));
       } else {
@@ -58,13 +62,33 @@ class SearchsBloc extends Bloc<SearchsEvent, SearchsState> {
 
       try {
         final requestHandler = RequestHandler.instance;
-        final taxonomicsList =
-            await TaxonomicSearchService(requestHandler: requestHandler)
-                .postTaxonomicSearch(
-          file: event.file,
-        );
 
-        emit(_Success(taxonomicsList: taxonomicsList, fileName: file!.name));
+        if (searchType == SearchType.occurrence) {
+          final occurrenciesList =
+              await OcurrenceSearchService(requestHandler: requestHandler)
+                  .postOcurrenceSearch(
+            file: event.file,
+          );
+          emit(
+            _Success(
+              occurrenciesList: occurrenciesList,
+              taxonomicsList: null,
+              fileName: file!.name,
+              searchType: SearchType.occurrence,
+            ),
+          );
+        } else {
+          final taxonomicsList =
+              await TaxonomicSearchService(requestHandler: requestHandler)
+                  .postTaxonomicSearch(
+            file: event.file,
+          );
+          emit(_Success(
+              taxonomicsList: taxonomicsList,
+              occurrenciesList: null,
+              fileName: file!.name,
+              searchType: SearchType.taxonomic));
+        }
       } on DefaultErrors catch (err) {
         emit(_Error(err));
       }
@@ -74,36 +98,71 @@ class SearchsBloc extends Bloc<SearchsEvent, SearchsState> {
       emit(const _Loading());
 
       try {
-        var data = <List<String>>[
-          [
-            'id',
-            'Nome pesquisado',
-            'Nomes retornados',
-            'Nome aceito/sinonimo',
-            'Sinonimo de',
-            'Base de dados (FDB/TPL)',
-            'Família respectiva da base de dados',
-            'Autor',
-            'Encontrado'
-          ],
-        ];
+        var data = <List<String>>[];
 
-        data.addAll(event.taxonomicsList.map<List<String>>(
-          (item) {
-            final taxonomicRow = [
-              item.id.toString(),
-              item.searchedSpeciesName.toString(),
-              item.returnedNames.toString(),
-              null.toString(),
-              item.synonymOf.toString(),
-              item.database.toString(),
-              item.respectiveFamily.toString(),
-              item.autor.toString(),
-              item.found.toString(),
-            ];
-            return taxonomicRow;
-          },
-        ).toList());
+        if (searchType == SearchType.occurrence) {
+          data = <List<String>>[
+            [
+              'Scientific Name',
+              'Database',
+              'Family',
+              'Country',
+              'Year',
+              'Month',
+              'Day',
+              'Lat',
+              'Long',
+            ],
+          ];
+
+          data.addAll(event.occurrenciesList!.map<List<String>>(
+            (item) {
+              final occurrenceRow = [
+                item.scientificName.toString(),
+                item.database.toString(),
+                item.family.toString(),
+                item.country.toString(),
+                item.year.toString(),
+                item.month.toString(),
+                item.day.toString(),
+                item.lat.toString(),
+                item.long.toString(),
+              ];
+              return occurrenceRow;
+            },
+          ).toList());
+        } else {
+          data = <List<String>>[
+            [
+              'id',
+              'Nome pesquisado',
+              'Nomes retornados',
+              'Nome aceito/sinonimo',
+              'Sinonimo de',
+              'Base de dados (FDB/TPL)',
+              'FamÃ­lia respectiva da base de dados',
+              'Autor',
+              'Encontrado'
+            ],
+          ];
+
+          data.addAll(event.taxonomicsList!.map<List<String>>(
+            (item) {
+              final taxonomicRow = [
+                item.id.toString(),
+                item.searchedSpeciesName.toString(),
+                item.returnedNames.toString(),
+                null.toString(),
+                item.synonymOf.toString(),
+                item.database.toString(),
+                item.respectiveFamily.toString(),
+                item.autor.toString(),
+                item.found.toString(),
+              ];
+              return taxonomicRow;
+            },
+          ).toList());
+        }
 
         String csvData = const ListToCsvConverter().convert(data);
 
