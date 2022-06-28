@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front_end/bloc/searchs/searchs_bloc.dart';
 import 'package:front_end/colors/colors.dart';
+import 'package:front_end/providers/occurrence.dart';
+import 'package:front_end/providers/taxonomic.dart';
+import 'package:front_end/routes/routes.dart';
 import 'package:front_end/utils/enums.dart';
 import 'package:front_end/utils/extensions.dart';
 import 'package:front_end/widgets/buttons/button_search.dart';
@@ -110,6 +115,25 @@ class _HomePageState extends State<HomePage> {
                           const SearchsEvent.reset(),
                         );
                     context.vRouter.pop();
+
+                    switch (searchType) {
+                      case SearchType.occurrence:
+                        context
+                            .read<OcurrenceProvider>()
+                            .setOccurences(occurrenceList);
+                        context.vRouter.to(
+                          RoutesApp.occurrencesSearch,
+                        );
+                        break;
+                      case SearchType.taxonomic:
+                        context
+                            .read<TaxonomicProvider>()
+                            .setTaxonomics(taxonomicList);
+                        context.vRouter.to(
+                          RoutesApp.taxonomicSearch,
+                        );
+                        break;
+                    }
                   },
                   onPressedExportFile: () {
                     context.read<SearchsBloc>().add(
