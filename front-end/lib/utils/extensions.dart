@@ -11,12 +11,16 @@ extension BuildContextUtils on BuildContext {
 }
 
 extension StringUtils on String? {
-  bool get isNullOrEmpty => this == null;
+  bool get isNotNull => this != null;
+
+  bool get isNullOrEmpty => this == null || this!.isEmpty;
 
   bool get isNotEmptySafe => this != null && this!.isNotEmpty;
 }
 
 extension IterableUtils on Iterable? {
+  bool get isNotNull => this != null;
+
   bool get isNullOrEmpty => this == null || this!.isEmpty;
 
   bool get isNotEmptySafe => this != null && this!.isNotEmpty;
