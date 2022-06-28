@@ -39,13 +39,13 @@ class Taxonomic {
 
   Map<String, dynamic> toMap() => <String, dynamic>{
         'id': id,
-        'Nome pesquisado': searchedSpeciesName,
-        'Nomes retornados': returnedNames,
-        'Nome aceito/sinonimo': synonymOf,
-        'Sinonimo de': database,
-        'Base de dados (FDB/TPL)': respectiveFamily,
-        'Família respectiva da base de dados': autor,
-        'Encontrado': found,
+        'searchedSpeciesName': searchedSpeciesName,
+        'returnedNames': returnedNames,
+        'synonymOf': synonymOf,
+        'database': database,
+        'respectiveFamily': respectiveFamily,
+        'autor': autor,
+        'found': found,
       };
 
   String toJson() => jsonEncode(toMap());
