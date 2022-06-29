@@ -18,5 +18,12 @@
   "labelButtonTaxonomicSearch": "Taxonomic Search",
   "labelUnexpectedError": "An unexpected error has occurred. Please try again!",
   "titleResultTaxonomicSearch": "Taxonomic Search Results",
-  "titleResultSearchOccurrence": "Occurrence Search Result"
+  "titleResultSearchOccurrence": "Occurrence Search Result",
+  "msgErrorBadRequest": "Invalid application.",
+  "msgErrorNotFound": "Resource not found.",
+  "msgErrorConnectionError": "Connection failed. Please try again!",
+  "msgErrorForbidden": "Acesso não autorizado para este recurso.",
+  "msgErrorUnauthorizedAccess": "Unauthorized access to this resource.",
+  "msgErrorUnexpectedError": "Unexpected Error. Try Again!",
+  "backInitial": "Home Screen"
 }

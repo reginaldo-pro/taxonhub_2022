@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:front_end/bloc/searchs/searchs_bloc.dart';
@@ -16,6 +14,7 @@ import 'package:front_end/widgets/modals/modal_types/modal_import_file.dart';
 import 'package:front_end/widgets/modals/modal_types/modal_success.dart';
 import 'package:front_end/widgets/modals/modal_types/modal_warning.dart';
 import 'package:vrouter/vrouter.dart';
+import 'package:front_end/utils/errors/capture_default_errors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, this.child}) : super(key: key);
@@ -192,7 +191,7 @@ class _HomePageState extends State<HomePage> {
                         );
                     context.vRouter.pop();
                   },
-                  message: context.T.labelUnexpectedError,
+                  message: err.defaultErrortoString(context),
                 );
               },
             ),

@@ -18,5 +18,12 @@
   "labelButtonTaxonomicSearch": "Busca Taxonômica",
   "labelUnexpectedError": "Ocorreu um erro inesperado. Tente novamente!",
   "titleResultTaxonomicSearch": "Resultado da Busca Taxonômica",
-  "titleResultSearchOccurrence": "Resultado da Busca de Ocorrência"
+  "titleResultSearchOccurrence": "Resultado da Busca de Ocorrência",
+  "msgErrorBadRequest": "Solicitação inválida.",
+  "msgErrorNotFound": "Recurso não encontrado.",
+  "msgErrorConnectionError": "Falha na conexão. Tente Novamente!",
+  "msgErrorForbidden": "Acesso não autorizado para este recurso.",
+  "msgErrorUnauthorizedAccess": "Acesso não autorizado para este recurso.",
+  "msgErrorUnexpectedError": "Erro inerperado. Tente Novamente!",
+  "backInitial": "Tela Inicial"
 }
