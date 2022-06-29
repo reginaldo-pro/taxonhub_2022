@@ -1,9 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages, avoid_web_libraries_in_flutter
 
-import 'dart:convert';
-import 'dart:html' as html;
 import 'package:bloc/bloc.dart';
-import 'package:csv/csv.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:front_end/models/occurrence_search/occurrence.dart';
@@ -46,6 +43,8 @@ class SearchsBloc extends Bloc<SearchsEvent, SearchsState> {
           allowMultiple: false,
           allowedExtensions: ['csv'],
         );
+
+        emit(const _Loading());
 
         if (result != null) {
           file = result.files.first;
@@ -97,87 +96,7 @@ class SearchsBloc extends Bloc<SearchsEvent, SearchsState> {
 
     on<_Export>((event, emit) {
       emit(const _Loading());
-
-      try {
-        var data = <List<String>>[];
-
-        if (searchType == SearchType.occurrence) {
-          data = <List<String>>[
-            [
-              'Scientific Name',
-              'Database',
-              'Family',
-              'Country',
-              'Year',
-              'Month',
-              'Day',
-              'Lat',
-              'Long',
-            ],
-          ];
-
-          data.addAll(event.occurrenciesList!.map<List<String>>(
-            (item) {
-              final occurrenceRow = [
-                item.scientificName.toString(),
-                item.database.toString(),
-                item.family.toString(),
-                item.country.toString(),
-                item.year.toString(),
-                item.month.toString(),
-                item.day.toString(),
-                item.lat.toString(),
-                item.long.toString(),
-              ];
-              return occurrenceRow;
-            },
-          ).toList());
-        } else {
-          data = <List<String>>[
-            [
-              'id',
-              'Nome pesquisado',
-              'Nomes retornados',
-              'Nome aceito/sinonimo',
-              'Sinonimo de',
-              'Base de dados (FDB/TPL)',
-              'FamÃ­lia respectiva da base de dados',
-              'Autor',
-              'Encontrado'
-            ],
-          ];
-
-          data.addAll(event.taxonomicsList!.map<List<String>>(
-            (item) {
-              final taxonomicRow = [
-                item.id.toString(),
-                item.searchedSpeciesName.toString(),
-                item.returnedNames.toString(),
-                null.toString(),
-                item.synonymOf.toString(),
-                item.database.toString(),
-                item.respectiveFamily.toString(),
-                item.autor.toString(),
-                item.found.toString(),
-              ];
-              return taxonomicRow;
-            },
-          ).toList());
-        }
-
-        String csvData = const ListToCsvConverter().convert(data);
-
-        html.AnchorElement()
-          ..href =
-              '${Uri.dataFromString(csvData, mimeType: 'text/csv', encoding: utf8)}'
-          ..download = event.fileName
-          ..style.display = 'none'
-          ..click();
-
-        emit(const _Empty());
-      } on DefaultErrors catch (err) {
-        emit(_Error(err));
-      }
+      emit(const _Empty());
     });
 
     on<_Alert>((event, emit) {
