@@ -30,7 +30,7 @@ class DataTableCustom extends StatelessWidget {
         margin: const EdgeInsets.only(
           left: 30,
           right: 30,
-          top: 150,
+          top: 20,
           bottom: 60,
         ),
         child: Column(

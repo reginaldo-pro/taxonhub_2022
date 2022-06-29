@@ -4,6 +4,7 @@ import 'package:front_end/models/occurrence_search/occurrence.dart';
 import 'package:front_end/providers/occurrence.dart';
 import 'package:front_end/utils/extensions.dart';
 import 'package:front_end/utils/resources.dart';
+import 'package:front_end/widgets/table/app_bar_search_custom.dart';
 import 'package:front_end/widgets/table/data_table_custom.dart';
 import 'package:provider/provider.dart';
 
@@ -46,6 +47,7 @@ class _OccurrencesSearchState extends State<OccurrencesSearch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const AppBarSearchCustom(),
       backgroundColor: Colors.transparent,
       body: DataTableCustom(
         title: context.T.titleResultSearchOccurrence,

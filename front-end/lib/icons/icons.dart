@@ -7,4 +7,5 @@ class IconsApp {
   static const IconData error = Icons.disabled_by_default_outlined;
   static const IconData success = Icons.check_circle_outlined;
   static const IconData done = Icons.done_outlined;
+  static const IconData back = Icons.arrow_back;
 }

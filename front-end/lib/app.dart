@@ -53,7 +53,7 @@ class _AppTaxonHubState extends State<AppTaxonHub> {
       supportedLocales: T.supportedLocales,
       routes: [
         VNester(
-          path: RoutesApp.main,
+          path: RoutesApp.home,
           widgetBuilder: (child) => Main(child: child),
           nestedRoutes: [
             VWidget(

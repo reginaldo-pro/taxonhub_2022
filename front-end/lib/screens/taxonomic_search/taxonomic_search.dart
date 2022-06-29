@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:front_end/models/taxonomic_search/taxonomic.dart';
 import 'package:front_end/providers/taxonomic.dart';
 import 'package:front_end/utils/resources.dart';
+import 'package:front_end/widgets/table/app_bar_search_custom.dart';
 import 'package:front_end/widgets/table/data_table_custom.dart';
 import 'package:provider/provider.dart';
 import 'package:front_end/utils/extensions.dart';
@@ -46,6 +47,7 @@ class _TaxonomicSearchState extends State<TaxonomicSearch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBarSearchCustom(),
       backgroundColor: Colors.transparent,
       body: DataTableCustom(
         title: context.T.titleResultTaxonomicSearch,
