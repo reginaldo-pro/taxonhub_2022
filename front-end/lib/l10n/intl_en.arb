@@ -16,5 +16,7 @@
   "msgSuccessModal": "The search was successful.",
   "labelButtonSearchOccurrence": "Search Occurrences",
   "labelButtonTaxonomicSearch": "Taxonomic Search",
-  "labelUnexpectedError": "An unexpected error has occurred. Please try again!"
+  "labelUnexpectedError": "An unexpected error has occurred. Please try again!",
+  "titleResultTaxonomicSearch": "Taxonomic Search Results",
+  "titleResultSearchOccurrence": "Occurrence Search Result"
 }
