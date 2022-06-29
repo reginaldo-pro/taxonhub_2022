@@ -1,8 +1,11 @@
+import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
-import 'package:front_end/models/occurrence_search/occurrence.dart';
 import 'package:front_end/models/taxonomic_search/taxonomic.dart';
 import 'package:front_end/providers/taxonomic.dart';
+import 'package:front_end/utils/resources.dart';
+import 'package:front_end/widgets/table/data_table_custom.dart';
 import 'package:provider/provider.dart';
+import 'package:front_end/utils/extensions.dart';
 
 class TaxonomicSearch extends StatefulWidget {
   const TaxonomicSearch({
@@ -15,6 +18,19 @@ class TaxonomicSearch extends StatefulWidget {
 
 class _TaxonomicSearchState extends State<TaxonomicSearch> {
   List<Taxonomic> taxonomics = [];
+  final header = <List<String>>[
+    [
+      'id',
+      'Nome pesquisado',
+      'Nomes retornados',
+      'Nome aceito/sinonimo',
+      'Sinonimo de',
+      'Base de dados (FDB/TPL)',
+      'Família respectiva da base de dados',
+      'Autor',
+      'Encontrado',
+    ],
+  ];
 
   @override
   void initState() {
@@ -31,100 +47,74 @@ class _TaxonomicSearchState extends State<TaxonomicSearch> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Center(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Container(
-            color: Colors.white,
-            height: 600,
-            width: 1600,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: DataTable(
-                columns: const [
-                  DataColumn(
-                    label: Text(
-                      'id',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    numeric: true,
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'Nome pesquisado',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    numeric: true,
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'Nomes retornados',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    numeric: true,
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'Nome aceito/sinonimo',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    numeric: true,
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'Sinonimo de',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    numeric: true,
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'Base de dados (FDB/TPL)',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    numeric: true,
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'Família respectiva da base de dados',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    numeric: true,
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'Autor',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    numeric: true,
-                  ),
-                  DataColumn(
-                    label: Text(
-                      'Encontrado',
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    numeric: true,
-                  ),
-                ],
-                rows: taxonomics.map((taxonomic) {
-                  return DataRow(
-                    cells: [
-                      DataCell(Text(taxonomic.id.toString())),
-                      DataCell(Text(taxonomic.searchedSpeciesName.toString())),
-                      DataCell(Text(taxonomic.returnedNames.toString())),
-                      DataCell(Text(null.toString())),
-                      DataCell(Text(taxonomic.synonymOf.toString())),
-                      DataCell(Text(taxonomic.database.toString())),
-                      DataCell(Text(taxonomic.respectiveFamily.toString())),
-                      DataCell(Text(taxonomic.autor.toString())),
-                      DataCell(Text(taxonomic.found.toString())),
-                    ],
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
-        ),
+      body: DataTableCustom(
+        title: context.T.titleResultTaxonomicSearch,
+        columns: header[0],
+        rowsCells: taxonomics.map((taxonomic) {
+          final synonymOf = taxonomic.synonymOf;
+
+          final acceptedName = synonymOf.isNotNull
+              ? (synonymOf!.isEmpty ? 'NOME_ACEITO' : 'SINONIMO')
+              : null.toString();
+
+          final List<String> cells = [
+            taxonomic.id.toString(),
+            taxonomic.searchedSpeciesName.toString(),
+            taxonomic.returnedNames.toString(),
+            acceptedName,
+            taxonomic.synonymOf.toString(),
+            taxonomic.database.toString(),
+            taxonomic.respectiveFamily.toString(),
+            taxonomic.autor.toString(),
+            taxonomic.found.toString(),
+          ];
+
+          return cells;
+        }).toList(),
+        onPressed: () {
+          var data = <List<String>>[
+            [
+              'id',
+              'Nome pesquisado',
+              'Nomes retornados',
+              'Nome aceito/sinonimo',
+              'Sinonimo de',
+              'Base de dados (FDB/TPL)',
+              'Família respectiva da base de dados',
+              'Autor',
+              'Encontrado'
+            ],
+          ];
+
+          data.addAll(taxonomics.map<List<String>>(
+            (taxonomic) {
+              final synonymOf = taxonomic.synonymOf;
+
+              final acceptedName = synonymOf.isNotNull
+                  ? (synonymOf!.isEmpty ? 'NOME_ACEITO' : 'SINONIMO')
+                  : null.toString();
+              final taxonomicRow = [
+                taxonomic.id.toString(),
+                taxonomic.searchedSpeciesName.toString(),
+                taxonomic.returnedNames.toString(),
+                acceptedName,
+                taxonomic.synonymOf.toString(),
+                taxonomic.database.toString(),
+                taxonomic.respectiveFamily.toString(),
+                taxonomic.autor.toString(),
+                taxonomic.found.toString(),
+              ];
+              return taxonomicRow;
+            },
+          ).toList());
+
+          String csvData = const ListToCsvConverter().convert(data);
+
+          Resources.dowloadCsv(
+            csvData: csvData,
+            fileName: 'taxonomic_search',
+          );
+        },
       ),
     );
   }
