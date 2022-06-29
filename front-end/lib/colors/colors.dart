@@ -19,4 +19,6 @@ class ColorsApp {
   static const Color backButton = Color.fromRGBO(238, 16, 16, 1.0);
   static const Color confirmButton = Color.fromRGBO(115, 206, 56, 1.0);
   static const Color fileButton = Color.fromRGBO(33, 159, 148, 1.0);
+  static const Color backgroundDataTable = Color.fromRGBO(242, 245, 200, 0.6);
+  static const Color titleTable = Color.fromRGBO(0, 121, 85, 0.8);
 }
